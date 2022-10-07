@@ -54,6 +54,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -62,6 +65,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -75,6 +79,61 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Pictures\BackOfCard.png" />
+    <Content Include="Pictures\Clubs\10.png" />
+    <Content Include="Pictures\Clubs\2.png" />
+    <Content Include="Pictures\Clubs\3.png" />
+    <Content Include="Pictures\Clubs\4.png" />
+    <Content Include="Pictures\Clubs\5.png" />
+    <Content Include="Pictures\Clubs\6.png" />
+    <Content Include="Pictures\Clubs\7.png" />
+    <Content Include="Pictures\Clubs\8.png" />
+    <Content Include="Pictures\Clubs\9.png" />
+    <Content Include="Pictures\Clubs\A.png" />
+    <Content Include="Pictures\Clubs\J.png" />
+    <Content Include="Pictures\Clubs\K.png" />
+    <Content Include="Pictures\Clubs\Q.png" />
+    <Content Include="Pictures\Diamonds\10.png" />
+    <Content Include="Pictures\Diamonds\2.png" />
+    <Content Include="Pictures\Diamonds\3.png" />
+    <Content Include="Pictures\Diamonds\4.png" />
+    <Content Include="Pictures\Diamonds\5.png" />
+    <Content Include="Pictures\Diamonds\6.png" />
+    <Content Include="Pictures\Diamonds\7.png" />
+    <Content Include="Pictures\Diamonds\8.png" />
+    <Content Include="Pictures\Diamonds\9.png" />
+    <Content Include="Pictures\Diamonds\A.png" />
+    <Content Include="Pictures\Diamonds\J.png" />
+    <Content Include="Pictures\Diamonds\K.png" />
+    <Content Include="Pictures\Diamonds\Q.png" />
+    <Content Include="Pictures\Hearts\10.png" />
+    <Content Include="Pictures\Hearts\2.png" />
+    <Content Include="Pictures\Hearts\3.png" />
+    <Content Include="Pictures\Hearts\4.png" />
+    <Content Include="Pictures\Hearts\5.png" />
+    <Content Include="Pictures\Hearts\6.png" />
+    <Content Include="Pictures\Hearts\7.png" />
+    <Content Include="Pictures\Hearts\8.png" />
+    <Content Include="Pictures\Hearts\9.png" />
+    <Content Include="Pictures\Hearts\A.png" />
+    <Content Include="Pictures\Hearts\J.png" />
+    <Content Include="Pictures\Hearts\K.png" />
+    <Content Include="Pictures\Hearts\Q.png" />
+    <Content Include="Pictures\Spades\10.png" />
+    <Content Include="Pictures\Spades\2.png" />
+    <Content Include="Pictures\Spades\3.png" />
+    <Content Include="Pictures\Spades\4.png" />
+    <Content Include="Pictures\Spades\5.png" />
+    <Content Include="Pictures\Spades\6.png" />
+    <Content Include="Pictures\Spades\7.png" />
+    <Content Include="Pictures\Spades\8.png" />
+    <Content Include="Pictures\Spades\9.png" />
+    <Content Include="Pictures\Spades\A.png" />
+    <Content Include="Pictures\Spades\J.png" />
+    <Content Include="Pictures\Spades\K.png" />
+    <Content Include="Pictures\Spades\Q.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
