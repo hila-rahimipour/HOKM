@@ -69,7 +69,7 @@ namespace HOKM
             this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(545, 12);
+            this.pictureBox1.Location = new System.Drawing.Point(537, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(93, 127);
             this.pictureBox1.TabIndex = 0;
@@ -80,7 +80,7 @@ namespace HOKM
             this.pictureBox2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.pictureBox2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox2.BackgroundImage")));
             this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox2.Location = new System.Drawing.Point(446, 12);
+            this.pictureBox2.Location = new System.Drawing.Point(438, 12);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(93, 127);
             this.pictureBox2.TabIndex = 0;
@@ -91,7 +91,7 @@ namespace HOKM
             this.pictureBox3.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.pictureBox3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox3.BackgroundImage")));
             this.pictureBox3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox3.Location = new System.Drawing.Point(347, 12);
+            this.pictureBox3.Location = new System.Drawing.Point(339, 12);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(93, 127);
             this.pictureBox3.TabIndex = 0;
@@ -102,7 +102,7 @@ namespace HOKM
             this.pictureBox4.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.pictureBox4.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox4.BackgroundImage")));
             this.pictureBox4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox4.Location = new System.Drawing.Point(248, 12);
+            this.pictureBox4.Location = new System.Drawing.Point(240, 12);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(93, 127);
             this.pictureBox4.TabIndex = 0;
@@ -113,7 +113,7 @@ namespace HOKM
             this.pictureBox5.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.pictureBox5.BackgroundImage = global::HOKM.Properties.Resources.K;
             this.pictureBox5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox5.Location = new System.Drawing.Point(545, 394);
+            this.pictureBox5.Location = new System.Drawing.Point(537, 383);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(93, 127);
             this.pictureBox5.TabIndex = 0;
@@ -124,7 +124,7 @@ namespace HOKM
             this.pictureBox6.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.pictureBox6.BackgroundImage = global::HOKM.Properties.Resources.K;
             this.pictureBox6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox6.Location = new System.Drawing.Point(347, 394);
+            this.pictureBox6.Location = new System.Drawing.Point(339, 383);
             this.pictureBox6.Name = "pictureBox6";
             this.pictureBox6.Size = new System.Drawing.Size(93, 127);
             this.pictureBox6.TabIndex = 0;
@@ -135,7 +135,7 @@ namespace HOKM
             this.pictureBox7.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.pictureBox7.BackgroundImage = global::HOKM.Properties.Resources.K;
             this.pictureBox7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox7.Location = new System.Drawing.Point(446, 394);
+            this.pictureBox7.Location = new System.Drawing.Point(438, 383);
             this.pictureBox7.Name = "pictureBox7";
             this.pictureBox7.Size = new System.Drawing.Size(93, 127);
             this.pictureBox7.TabIndex = 0;
@@ -146,7 +146,7 @@ namespace HOKM
             this.pictureBox8.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.pictureBox8.BackgroundImage = global::HOKM.Properties.Resources.K;
             this.pictureBox8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox8.Location = new System.Drawing.Point(248, 394);
+            this.pictureBox8.Location = new System.Drawing.Point(240, 383);
             this.pictureBox8.Name = "pictureBox8";
             this.pictureBox8.Size = new System.Drawing.Size(93, 127);
             this.pictureBox8.TabIndex = 0;
@@ -157,7 +157,7 @@ namespace HOKM
             this.pictureBox9.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.pictureBox9.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox9.BackgroundImage")));
             this.pictureBox9.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox9.Location = new System.Drawing.Point(727, 156);
+            this.pictureBox9.Location = new System.Drawing.Point(712, 151);
             this.pictureBox9.Name = "pictureBox9";
             this.pictureBox9.Size = new System.Drawing.Size(139, 93);
             this.pictureBox9.TabIndex = 0;
@@ -168,7 +168,7 @@ namespace HOKM
             this.pictureBox13.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.pictureBox13.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox13.BackgroundImage")));
             this.pictureBox13.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox13.Location = new System.Drawing.Point(727, 255);
+            this.pictureBox13.Location = new System.Drawing.Point(712, 250);
             this.pictureBox13.Name = "pictureBox13";
             this.pictureBox13.Size = new System.Drawing.Size(139, 93);
             this.pictureBox13.TabIndex = 0;
@@ -179,7 +179,7 @@ namespace HOKM
             this.pictureBox14.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.pictureBox14.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox14.BackgroundImage")));
             this.pictureBox14.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox14.Location = new System.Drawing.Point(727, 354);
+            this.pictureBox14.Location = new System.Drawing.Point(712, 349);
             this.pictureBox14.Name = "pictureBox14";
             this.pictureBox14.Size = new System.Drawing.Size(139, 93);
             this.pictureBox14.TabIndex = 0;
@@ -190,7 +190,7 @@ namespace HOKM
             this.pictureBox15.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.pictureBox15.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox15.BackgroundImage")));
             this.pictureBox15.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox15.Location = new System.Drawing.Point(727, 57);
+            this.pictureBox15.Location = new System.Drawing.Point(712, 52);
             this.pictureBox15.Name = "pictureBox15";
             this.pictureBox15.Size = new System.Drawing.Size(139, 93);
             this.pictureBox15.TabIndex = 0;
@@ -201,7 +201,7 @@ namespace HOKM
             this.pictureBox10.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.pictureBox10.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox10.BackgroundImage")));
             this.pictureBox10.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox10.Location = new System.Drawing.Point(12, 156);
+            this.pictureBox10.Location = new System.Drawing.Point(12, 151);
             this.pictureBox10.Name = "pictureBox10";
             this.pictureBox10.Size = new System.Drawing.Size(131, 93);
             this.pictureBox10.TabIndex = 0;
@@ -212,7 +212,7 @@ namespace HOKM
             this.pictureBox11.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.pictureBox11.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox11.BackgroundImage")));
             this.pictureBox11.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox11.Location = new System.Drawing.Point(12, 255);
+            this.pictureBox11.Location = new System.Drawing.Point(12, 250);
             this.pictureBox11.Name = "pictureBox11";
             this.pictureBox11.Size = new System.Drawing.Size(131, 93);
             this.pictureBox11.TabIndex = 0;
@@ -223,7 +223,7 @@ namespace HOKM
             this.pictureBox12.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.pictureBox12.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox12.BackgroundImage")));
             this.pictureBox12.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox12.Location = new System.Drawing.Point(12, 354);
+            this.pictureBox12.Location = new System.Drawing.Point(12, 349);
             this.pictureBox12.Name = "pictureBox12";
             this.pictureBox12.Size = new System.Drawing.Size(131, 93);
             this.pictureBox12.TabIndex = 0;
@@ -234,7 +234,7 @@ namespace HOKM
             this.pictureBox16.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.pictureBox16.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox16.BackgroundImage")));
             this.pictureBox16.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox16.Location = new System.Drawing.Point(12, 57);
+            this.pictureBox16.Location = new System.Drawing.Point(12, 52);
             this.pictureBox16.Name = "pictureBox16";
             this.pictureBox16.Size = new System.Drawing.Size(131, 93);
             this.pictureBox16.TabIndex = 0;
@@ -246,7 +246,7 @@ namespace HOKM
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(878, 533);
+            this.ClientSize = new System.Drawing.Size(863, 522);
             this.Controls.Add(this.pictureBox8);
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.pictureBox7);
