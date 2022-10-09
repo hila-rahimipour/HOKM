@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net;
 using System.Net.Sockets;
 
 namespace HOKM.Code
@@ -21,86 +20,96 @@ namespace HOKM.Code
         private static string strong;
 
         private static List<Card> card_history = new List<Card>();
+        private static int[] points = new int[2];
 
         public static void Main(string[] args)
         {
-
-            IPAddress ipAddr = IPAddress.Parse(SERVER_ADDR);
-            IPEndPoint server = new IPEndPoint(ipAddr, SERVER_PORT);
-            Socket sock = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            sock.Connect(server);
+            Socket sock = Networking.OpenSocket(SERVER_ADDR, SERVER_PORT);
 
             // Receive Client ID:
-            byte[] id_mes = new byte[1024];
-            sock.Receive(id_mes);
-            string id_text = Encoding.ASCII.GetString(id_mes);
+            string id_text = Networking.RecvMessage(sock);
             ID = int.Parse(id_text.Split(':')[1]);
             Console.WriteLine("This client's ID is " + ID);
 
             // Send Username:
-            //byte[] name_mes = Encoding.ASCII.GetBytes("username:" + USERNAME);
-            //sock.Send(name_mes);
+            // Networking.SendMessage(sock, "username:" + USERNAME);
 
             // Determine Strong:
             strong = GetStrong(sock);
             if (strong != null)
-            {
                 while (true)
                 {
-                    sock.Send(Encoding.ASCII.GetBytes("set_strong:" + strong));
-                    byte[] response = new byte[1024];
-                    sock.Receive(response);
-                    if (Encoding.ASCII.GetString(id_mes) == "ok")
+                    Networking.SendMessage(sock, "set_strong:" + strong);
+                    if (Networking.RecvMessage(sock) == "ok")
                         break;
                 }
-            }
 
             BuildPack(sock);
 
             bool isGame = true;
             string result;
+            int turn;
 
             // Play:
             while (isGame)
             {
                 result = DoTurn(sock);
+                turn = int.Parse(result.Split('p')[0]);
+                result = result.Substring(1);
+
                 if (result == "GAME_OVER")
                     isGame = false;
                 else
-                {
                     while (true)
                     {
-                        sock.Send(Encoding.ASCII.GetBytes(result));
-                        byte[] response = new byte[1024];
-                        sock.Receive(response);
-                        if (Encoding.ASCII.GetString(id_mes) == "ok")
+                        Networking.SendMessage(sock, result);
+                        string response = Networking.RecvMessage(sock);
+                        if (response == "ok")
                             break;
-                        else if (Encoding.ASCII.GetString(id_mes) == "bad_play")
-                        {
+                        else if (response == "bad_play")
                             result = DoTurn(sock); //do something to change the selected card
-                        }
                     }
+                // Round over:
+                string data = Networking.RecvMessage(sock);
+
+                string[] datarr = data.Split(',');
+
+                bool isWinner = datarr[0].Split(':')[1] == (ID + "+" + partner_id) || datarr[0].Split(':')[1] == (partner_id + "+" + ID);
+
+                foreach (string score_data in datarr[1].Split(':')[1].Split('|'))
+                {
+                    if (score_data.Split('*')[0] == (ID + "+" + partner_id) || score_data.Split('*')[0] == (partner_id + "+" + ID))
+                        points[0] = int.Parse(score_data.Split('*')[1]);
+                    else
+                        points[1] = int.Parse(score_data.Split('*')[1]);
+                }
+
+                for (int i = 0; i < 4; i++)
+                {
+                    string card_data = datarr[2].Split(':')[1].Split('|')[i];
+                    Card c = new Card(card_data.Split('*')[0], card_data.Split('*')[1]);
+                    c.SetPlayer(i + 1);
+                    int cardTurn = (ID + 4 - turn) % 4;
+                    if (cardTurn == 2) cardTurn = 3;
+                    else if (cardTurn == 3) cardTurn = 2;
+                    c.SetTurn(cardTurn);
+                    card_history.Add(c);
                 }
             }
 
-            sock.Shutdown(SocketShutdown.Both);
-            sock.Close();
+            Networking.CloseSocket(sock);
         }
 
         public static string GetStrong(Socket sock)
         {
-            byte[] mes = new byte[1024];
-            sock.Receive(mes);
-            string str_mes = Encoding.ASCII.GetString(mes);
-            int ruler_id = int.Parse(str_mes.Split(':')[1]);
-
-            mes = new byte[1024];
-            sock.Receive(mes);
+            string mes = Networking.RecvMessage(sock);
+            int ruler_id = int.Parse(mes.Split(':')[1]);
+            mes = Networking.RecvMessage(sock);
 
             if (ruler_id == ID)
             {
                 Console.WriteLine("I am the ruler");
-                string five_mes = Encoding.ASCII.GetString(mes);
+                string five_mes = mes;
                 string[] five_string_arr = five_mes.Split('|');
                 Card[] first_five = new Card[5];
                 for (int i = 0; i < 5; i++)
@@ -116,12 +125,9 @@ namespace HOKM.Code
 
         public static void BuildPack(Socket sock)
         {
-            byte[] mes = new byte[1024];
-            sock.Receive(mes);
-            string str_mes = Encoding.ASCII.GetString(mes);
-            str_mes = str_mes.Substring(9);
+            string mes = Networking.RecvMessage(sock);
 
-            string[] data = str_mes.Split(',');
+            string[] data = mes.Split(',');
             string[] data_cards  = data[0].Split('|');
             string[] teams = data[1].Split(':')[1].Split('|');
             strong = data[2].Split(':')[1];
@@ -143,29 +149,26 @@ namespace HOKM.Code
 
         public static string DoTurn(Socket sock)
         {
-            byte[] mes = new byte[1024];
-            sock.Receive(mes);
-            string str_mes = Encoding.ASCII.GetString(mes);
-            str_mes = str_mes.Substring(9);
+            string mes = Networking.RecvMessage(sock);
 
-            if (str_mes == "GAME_OVER")
+            if (mes == "GAME_OVER")
                 return "GAME_OVER";
 
-            string[] data = str_mes.Split(',');
+            string[] data = mes.Split(',');
             string suit = data[0].Split(':')[1];
             string[] cards_str = data[1].Split(':')[1].Split('|');
             Card[] played_cards = new Card[cards_str.Length];
+            int counter = 0;
             for (int i = 0; i < cards_str.Length; i++)
                 if (cards_str[i] != "")
                 {
-                    Card c = new Card(cards_str[i].Split('*')[0], cards_str[i].Split('*')[1]);
-                    played_cards[i] = c;
-                    card_history.Add(c);
+                    played_cards[i] = new Card(cards_str[i].Split('*')[0], cards_str[i].Split('*')[1]);
+                    counter++;
                 }
 
             Card selected = pack[0];
             // Algorithm
-            string format = "played_card:" + selected.GetCardType() + "*" + selected.GetCardRank();
+            string format = counter + "played_card:" + selected.GetCardType() + "*" + selected.GetCardRank();
             return format;
         }
     }
