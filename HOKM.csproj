@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Test.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -134,6 +135,13 @@
     <Content Include="Pictures\Spades\J.png" />
     <Content Include="Pictures\Spades\K.png" />
     <Content Include="Pictures\Spades\Q.png" />
+    <Content Include="server\base_classes.py" />
+    <Content Include="server\game.py" />
+    <Content Include="server\handler.py" />
+    <Content Include="server\human_dumb_client.py" />
+    <Content Include="server\insructions.txt" />
+    <Content Include="server\linked_list.py" />
+    <Content Include="server\server.py" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
