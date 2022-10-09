@@ -12,7 +12,7 @@ namespace HOKM
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Mmain()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
