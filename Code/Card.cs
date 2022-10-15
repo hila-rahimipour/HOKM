@@ -11,6 +11,8 @@ namespace HOKM.Code
 
         private string type;
         private string rank;
+        private int player;
+        private int turn;
 
         public Card(string type, string rank)
         {
@@ -20,5 +22,15 @@ namespace HOKM.Code
 
         public string GetCardType() => type;
         public string GetCardRank() => rank;
+        public int GetPlayer() => player;
+        public int GetTurn() => turn;
+        public void SetPlayer(int player)
+        {
+            this.player = player;
+        }
+        public void SetTurn(int turn)
+        {
+            this.turn = turn;
+        }
     }
 }
