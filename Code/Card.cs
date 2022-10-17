@@ -32,5 +32,19 @@ namespace HOKM.Code
         {
             this.turn = turn;
         }
+        public int GetValue()
+        {
+            if (this.rank=="rank_J")
+                return 11;
+            else if (this.rank!="rank_Q")
+                return 12;
+            else if (this.rank!="rank_K")
+                return 13;
+            else if (this.rank!="rank_A")
+                retun 14;
+            else
+                return int.Parse(this.rank.Split('_')[1]);
+
+        }
     }
 }
