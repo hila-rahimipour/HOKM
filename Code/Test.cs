@@ -22,6 +22,13 @@ namespace HOKM.Code
         private static List<Card> card_history = new List<Card>();
         private static int[] points = new int[2];
 
+        private static int enemy1=0;
+        private static int enemy2=0;
+        private static string[] discover = new string[5];
+
+        //0-SPADES, 1-CLUBS, 2-DIAMONDS, 3-HEARTS
+        private static int[] big_card = {14, 14, 14, 14};
+
         public static void Main(string[] args)
         {
             Socket sock = Networking.OpenSocket(SERVER_ADDR, SERVER_PORT);
@@ -171,6 +178,64 @@ namespace HOKM.Code
             string format = counter + "played_card:" + selected.GetCardType() + "*" + selected.GetCardRank();
             return format;
         }
+        public static int GetBegginer(int counter)
+        {
+            switch (counter)
+            {
+                //1 3 2 4
+                case 0:
+                    //im first
+                    return ID;
+                case 1:
+                    //im second
+                    if (ID == 1)
+                        return 4;
+                    if (ID == 2)
+                        return 3;
+                    if (ID == 3)
+                        return 1;
+                    if (ID == 4)
+                        return 2;
+                case 2:
+                    //im third
+                    if (ID == 1)
+                        return 2;
+                    if (ID == 2)
+                        return 1;
+                    if (ID == 3)
+                        return 4;
+                    if (ID == 4)
+                        return 3;
+                case 3:
+                    //im fourth
+                    if (ID == 1)
+                        return 3;
+                    if (ID == 2)
+                        return 4;
+                    if (ID == 3)
+                        return 2;
+                    if (ID == 4)
+                        return 1;
+
+            }
+
+        }
+
+        public static void Discover(int counter, Card[] played_cards)
+        {
+            //updates the current biggest card in each suit
+            foreach(Card card in played_cards)
+            {
+                if (card.GetCardType()=="SPADES" && card.GetValue() == big_card[0])
+                    big_card[0]--;
+                else if (card.GetCardType()=="CLUBS" && card.GetValue() == big_card[1])
+                    big_card[1]--;
+                else if (card.GetCardType()=="DIAMONDS" && card.GetValue() == big_card[2])
+                    big_card[2]--;
+                else if (card.GetCardType()=="HEARTS" && card.GetValue() == big_card[3])
+                    big_card[3]--;
+            }
+            //1 3 2 4
     }
 
 }
