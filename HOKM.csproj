@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Code\Card.cs" />
     <Compile Include="Code\Networking.cs" />
+    <Compile Include="Code\Strategy.cs" />
     <Compile Include="Code\Test.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
