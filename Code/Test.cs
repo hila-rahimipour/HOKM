@@ -236,6 +236,27 @@ namespace HOKM.Code
                     big_card[3]--;
             }
             //1 3 2 4
-    }
+        }
+        public static Card killSmall (int counter, Card[] played_cards)
+        {
+            int begginer = GetBegginer(counter);
+            Card first_card = Card[begginer];
+            bool have_type = false;
+            for (int i=0; i<pack.Length; i++)
+            {
+                if (first_card.GetCardType() == pack[i].GetCardType())
+                    have_type = true;
+            }
+            Card my_card=new Card("DIAMONDS", 20);
+            if (!have_type)
+            {
+                for (int i = 0; i < pack.Length; i++)
+                {
+                    if (pack[i].GetCardType() == strong)
+                        if (pack[i].GetValue() < my_card.GetValue())
+                            my_card = pack[i];
+                }
+            }
+        }
 
 }
