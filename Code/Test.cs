@@ -126,9 +126,98 @@ namespace HOKM.Code
                 for (int i = 0; i < 5; i++)
                     first_five[i] = new Card(five_string_arr[i].Split('*')[0], five_string_arr[i].Split('*')[1]);
 
-                string strong = "HEARTS";  // Placeholder
-                // Algorithm
-                return strong;
+                //0-SPADES, 1-CLUBS, 2-DIAMONDS, 3-HEARTS
+                int[] types_count = {0, 0, 0, 0};
+                for (int i=0; i < first_five.Length; i++)
+                {
+                    switch (first_five[i].GetCardType())
+                    {
+                        case "SPADES":
+                            types_count[0]++;
+                        case "CLUBS":
+                            types_count[1]++;
+                        case "DIAMONDS":
+                            types_count[2]++;
+                        case "HEARTS":
+                            types_count[3]++;
+                    }
+                }
+                int max_cards = types_count[0];
+                int strong_id = 0;
+                for (int i=1; i < types_count.Length; i++)
+                {
+                    if (types_count[i] > max_cards)
+                    {
+                        max_cards = types_count[i];
+                        strong_id=i;
+                        switch (strong_id)
+                        {
+                            case 0:
+                                strong="SPADES";
+                            case 1:
+                                strong="CLUBS";
+                            case 2:
+                                strong = "DIAMONS";
+                            case 3:
+                                strong = "HEARTS";
+                        }
+                    }
+                }
+                for (int i=0; i<types_count.Length; i++)
+                {
+                    if (max_cards == types_count[i])
+                    {
+                        int[] max_count_values = new int[2];
+                        int count_max = 0;
+
+                        int[] new_max = new int[2];
+                        int new_count=0;
+                        string new_strong;
+                        switch (types_count[i])
+                        {
+                            case 0:
+                                new_strong="SPADES";
+                            case 1:
+                                new_strong="CLUBS";
+                            case 2:
+                                new_strong = "DIAMONS";
+                            case 3:
+                                new_strong = "HEARTS";
+                        }
+
+                        for (int j=0; j < first_five.Length; j++)
+                        {
+                            if (first_five[i].GetCardType() == strong)
+                            {
+                                max_count_values[count_max] = first_five[i].GetValue();
+                                count_max++;
+                            }
+                            if (first_five[i].GetCardType() == new_strong)
+                            {
+                                new_max[count_max]=first_five[i].GetValue();
+                                count_max++;
+                            }
+                        }
+                        int maxNumFirst = Math.Max(max_count_values[0], max_count_values[1]);
+                        int minNumFirst = Math.Min(max_count_values[0], max_count_values[1]);
+
+                        int maxNumSec = Math.Max(new_max[0], new_max[1]);
+                        int minNumSec = Math.Min(new_max[0], new_max[1]);
+                        if (maxNumFirst>maxNumSec && minNumFirst>minNumSec)
+                            return strong;
+                        else if (maxNumFirst<maxNumSec && minNumFirst<minNumSec)
+                            return new_strong;
+                        else
+                        {
+                            if (maxNumFirst>maxNumSec)
+                                return strong;
+                            else
+                               return new_strong;
+                        }
+
+                    }
+                }
+                ;
             }
 
             return null;
@@ -377,9 +466,10 @@ namespace HOKM.Code
                             my_card = pack[i];
 
             }
-            if (my_card.GetCardRank()=="rank_A" && my_card.GetCardType())
+            if (my_card.GetCardRank()!="rank_A" && my_card.GetCardType()!="DIAMONDS")                
+                return my_card;
+            else
                 //use other algorithem or put random card
-            return my_card;
 
         }
         public static int GetCurrentWinner(Card[] played_cards, int counter)
@@ -410,8 +500,7 @@ namespace HOKM.Code
         {
             return played_cards[GetCurrentWinner(played_cards, counter)-1];
         }
-        
-        
+       
 
     }
 
