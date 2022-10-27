@@ -269,6 +269,21 @@ namespace HOKM.Code
                 for (int i=0; i<played_cards.Length;i++)
                     if (first_card.GetCardType()() != played_cards[i].GetCardType()())
                         discover[i + 1] = discover[i+1]+"NO STRONG|";
+            int current_winner = GetCurrentWinner(played_cards,counter);
+            Card winner_card = GetCurrentWinnerCard(played_cards,counter);
+            int[] order = GetOrder(counter);
+            int first_player = order[0];
+            if (first_player!=partner_id)
+            {
+                Card partner_card = played_cards[partner_id-1];
+                if (winner_card.GetCardType()==first_card.GetCardType())
+                    if (partner_card.GetCardType()==winner_card.GetCardType())
+                        if (winner_card.GetValue()-partner_card.GetValue()<3)
+                            discover[partner_id] = discover[partner_id] + "KILL "+
+                                partner_card.GetCardType()+"|";
+
+            }
+
         }
         public static Card killSmall (int counter, Card[] played_cards)
         {
@@ -390,8 +405,13 @@ namespace HOKM.Code
                        
             }
             return current_winner_id;
-
         }
+        public static Card GetCurrentWinnerCard(Card[] played_cards, int counter)
+        {
+            return played_cards[GetCurrentWinner(played_cards, counter)-1];
+        }
+        
+        
 
     }
 
