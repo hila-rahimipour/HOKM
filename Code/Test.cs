@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 
 namespace HOKM.Code
 {
@@ -25,6 +26,8 @@ namespace HOKM.Code
         private static int enemy1=0;
         private static int enemy2=0;
         private static string[] discover = new string[5];
+
+        private string int count=-1;
 
         //0-SPADES, 1-CLUBS, 2-DIAMONDS, 3-HEARTS
         private static int[] big_card = {14, 14, 14, 14};
@@ -160,6 +163,18 @@ namespace HOKM.Code
 
             if (mes == "GAME_OVER")
                 return "GAME_OVER";
+            else if (mes.Contains("round end"))
+            {
+                Card round_card[] = new Card[4];
+                string[] cards = mes.Split('round_cards:')[1].Split('|');
+                for (int i=0; i < round_card.Length; i++)
+                {
+                    round_card[i]=new Card(cards[i].Split('*')[0], cards[i].Split('*')[1]);
+                }
+                Discover(counter, round_card);
+
+
+            }
 
             string[] data = mes.Split(',');
             string suit = data[0].Split(':')[1];
@@ -178,49 +193,55 @@ namespace HOKM.Code
             string format = counter + "played_card:" + selected.GetCardType() + "*" + selected.GetCardRank();
             return format;
         }
-        public static int GetBegginer(int counter)
+        public static int GetOrder(int counter)
         {
             switch (counter)
             {
                 //1 3 2 4
                 case 0:
                     //im first
-                    return ID;
+                    if (ID == 1)
+                        return {1, 3, 2, 4};
+                    if (ID == 2)
+                        return {2, 4, 1, 3};
+                    if (ID == 3)
+                        return {3, 2, 4, 1};
+                    if (ID == 4)
+                        return {4, 1, 3, 2};
                 case 1:
                     //im second
                     if (ID == 1)
-                        return 4;
+                        return {4, 1, 3, 2};
                     if (ID == 2)
-                        return 3;
+                        return {3, 2, 4, 1};
                     if (ID == 3)
-                        return 1;
+                        return {1, 3, 2, 4};
                     if (ID == 4)
-                        return 2;
+                        return {2, 4, 1, 3};
                 case 2:
                     //im third
                     if (ID == 1)
-                        return 2;
+                        return {2, 4, 1, 3};
                     if (ID == 2)
-                        return 1;
+                        return {1, 3, 2, 4};
                     if (ID == 3)
-                        return 4;
+                        return {4, 1, 3, 2};
                     if (ID == 4)
-                        return 3;
+                        return {3, 2, 4, 1};
                 case 3:
                     //im fourth
                     if (ID == 1)
-                        return 3;
+                        return {3, 2, 4, 1};
                     if (ID == 2)
-                        return 4;
+                        return {4, 1, 3, 2};
                     if (ID == 3)
-                        return 2;
+                        return {2, 4, 1, 3};
                     if (ID == 4)
-                        return 1;
+                        return {1, 3, 2, 4};
 
             }
 
         }
-
         public static void Discover(int counter, Card[] played_cards)
         {
             //updates the current biggest card in each suit
@@ -236,10 +257,21 @@ namespace HOKM.Code
                     big_card[3]--;
             }
             //1 3 2 4
+
+            Card first_card = played_cards[GetOrder(counter)[0]];
+            for (int i = 0; i < played_cards.Length; i++)
+            {
+                if (first_card.GetCardType()() != played_cards[i].GetCardType()() && first_card.GetCardType()()!=strong)
+                    discover[i+1]= discover[i+1] + "KILL " + first_card.GetCardType()()+"|";
+            }
+            if (first_card.GetCardType()()==strong)
+                for (int i=0; i<played_cards.Length;i++)
+                    if (first_card.GetCardType()() != played_cards[i].GetCardType()())
+                        discover[i + 1] = discover[i+1]+"NO STRONG|";
         }
         public static Card killSmall (int counter, Card[] played_cards)
         {
-            int begginer = GetBegginer(counter);
+            int begginer = GetOrder(counter)[0];
             Card first_card = Card[begginer];
             bool have_type = false;
             for (int i=0; i<pack.Length; i++)
@@ -247,16 +279,56 @@ namespace HOKM.Code
                 if (first_card.GetCardType() == pack[i].GetCardType())
                     have_type = true;
             }
-            Card my_card=new Card("DIAMONDS", 20);
+
+            int strong_counter=0;
+            Card my_card=new Card("DIAMONDS", "rank_A");
             if (!have_type)
             {
                 for (int i = 0; i < pack.Length; i++)
                 {
                     if (pack[i].GetCardType() == strong)
-                        if (pack[i].GetValue() < my_card.GetValue())
-                            my_card = pack[i];
+                        {
+                            strong_counter++;
+                            if (pack[i].GetValue() < my_card.GetValue())
+                                my_card = pack[i];
+                        }
                 }
             }
+            if (strong_counter>4 && my_card.GetValue()<10)
+                return my_card;
+            else
+            {
+                Card minCard = new Card("DIAMONDS", "rank_A");
+                for (int i=0; i<pack.Length; i++)
+                    {
+                        if (pack[i].GetValue()<minCard.GetValue())
+                            minCard = pack[i];
+                    }
+                return minCard;
+            }
         }
+        public static void IfPartnerKillsSomething()
+        {
+            string[] partner_discover = discover[partner_id].Split('|');
+            string[] kills = new string[4];
+            for (int i=0; i<partner_discover;i++)
+                if (partner_discover[i].Contains("KILL"))
+                    kills[i] = partner_discover[i].Split('KILL ')[1];
+            
+            Card my_card = new Card("DIAMONDS", "rank_A");
+            for (int i=0; i<pack.Length; i++)
+            {
+                for (int j=0; j<kills.Length; j++)
+                    if (pack[i].GetCardType()() == kills[j])
+                        if (my_card.GetValue() > pack[i].GetValue())
+                            my_card = pack[i];
+
+            }
+            if (my_card.GetCardRank()=="rank_A" && my_card.GetCardType())
+                //use other algorithem or put random card
+
+        }
+
+    }
 
 }
