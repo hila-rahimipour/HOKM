@@ -307,7 +307,8 @@ namespace HOKM.Code
                 return minCard;
             }
         }
-        public static void IfPartnerKillsSomething()
+        //if im first
+        public static Card IfPartnerKillsSomething()
         {
             string[] partner_discover = discover[partner_id].Split('|');
             string[] kills = new string[4];
@@ -326,6 +327,31 @@ namespace HOKM.Code
             }
             if (my_card.GetCardRank()=="rank_A" && my_card.GetCardType())
                 //use other algorithem or put random card
+            return my_card;
+
+        }
+        public static void GetCurrentWinner(Card[] played_cards, int counter)
+        {
+            Card current_winner_card = played_cards[0];
+            int current_winner_id=1;
+            for (int i=1; i < played_cards.Length; i++)
+            {
+                if (current_winner_card.GetValue()<played_cards[i].GetValue() 
+                    && current_winner_card.GetCardType() == played_cards[i].GetCardType())
+                {
+                    current_winner_card=played_cards[i]; 
+                    current_winner_id=i+1;
+                }
+                else
+                {
+                    if (played_cards[i].GetCardType()==strong)
+                    {
+                        current_winner_card = played_cards[i];
+                        current_winner_card=i+1;
+                    }    
+                }
+                       
+            }
 
         }
 
