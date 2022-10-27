@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Security.Cryptography;
+using System.Diagnostics.Eventing.Reader;
 
 namespace HOKM.Code
 {
@@ -279,19 +280,55 @@ namespace HOKM.Code
                 if (first_card.GetCardType() == pack[i].GetCardType())
                     have_type = true;
             }
+            bool killed_enemy = false;
+            Card killer = null;
+            for (int i=0; i < played_cards.Length; i++)
+            {
+                if (first_card.GetCardType()!=played_cards[i].GetCardType() 
+                    && played_cards[i].GetCardType() == strong)
+                {
+                    if (killer==null)
+                        killer = played_cards[i];
+                    else
+                    {
+                        if (killer.GetValue() < played_cards[i].GetValue())
+                            killer = played_cards[i];
+                    }
+                    if (i+1==enemy1||i+1==enemy2)
+                    {
+                        killed_enemy = true;
+                    }
+
+                }
+            }
 
             int strong_counter=0;
             Card my_card=new Card("DIAMONDS", "rank_A");
-            if (!have_type)
+            if (!have_type && GetCurrentWinner()!=partner_id )
             {
-                for (int i = 0; i < pack.Length; i++)
+                if (!killed_enemy)
                 {
-                    if (pack[i].GetCardType() == strong)
-                        {
-                            strong_counter++;
-                            if (pack[i].GetValue() < my_card.GetValue())
-                                my_card = pack[i];
-                        }
+                    for (int i = 0; i < pack.Length; i++)
+                    {
+                        if (pack[i].GetCardType() == strong)
+                            {
+                                strong_counter++;
+                                if (pack[i].GetValue() < my_card.GetValue())
+                                    my_card = pack[i];
+                            }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < pack.Length; i++)
+                    {
+                        if (pack[i].GetCardType() == strong)
+                            {
+                                strong_counter++;
+                                if (pack[i].GetValue() > killer.GetValue())
+                                    my_card = pack[i];
+                            }
+                    }
                 }
             }
             if (strong_counter>4 && my_card.GetValue()<10)
@@ -330,7 +367,7 @@ namespace HOKM.Code
             return my_card;
 
         }
-        public static void GetCurrentWinner(Card[] played_cards, int counter)
+        public static int GetCurrentWinner(Card[] played_cards, int counter)
         {
             Card current_winner_card = played_cards[0];
             int current_winner_id=1;
@@ -347,11 +384,12 @@ namespace HOKM.Code
                     if (played_cards[i].GetCardType()==strong)
                     {
                         current_winner_card = played_cards[i];
-                        current_winner_card=i+1;
+                        current_winner_id=i+1;
                     }    
                 }
                        
             }
+            return current_winner_id;
 
         }
 
