@@ -22,7 +22,7 @@ namespace HOKM.Code
         private static List<Card> card_history = new List<Card>();
         private static int[] points = new int[2];
 
-        public static void Main(string[] args)
+        public static void Mmain(string[] args)
         {
             Socket sock = Networking.OpenSocket(SERVER_ADDR, SERVER_PORT);
 

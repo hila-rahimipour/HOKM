@@ -31,10 +31,6 @@ namespace HOKM
             img.RotateFlip(RotateFlipType.Rotate270FlipNone);
             pictureBox11.BackgroundImage = img;
 
-            img = pictureBox12.BackgroundImage;
-            img.RotateFlip(RotateFlipType.Rotate270FlipNone);
-            pictureBox12.BackgroundImage = img;
-
             img = pictureBox13.BackgroundImage;
             img.RotateFlip(RotateFlipType.Rotate90FlipNone);
             pictureBox13.BackgroundImage = img;
@@ -42,10 +38,6 @@ namespace HOKM
             img = pictureBox14.BackgroundImage;
             img.RotateFlip(RotateFlipType.Rotate90FlipNone);
             pictureBox14.BackgroundImage = img;
-
-            img = pictureBox15.BackgroundImage;
-            img.RotateFlip(RotateFlipType.Rotate90FlipNone);
-            pictureBox15.BackgroundImage = img;
 
             img = pictureBox16.BackgroundImage;
             img.RotateFlip(RotateFlipType.Rotate270FlipNone);

@@ -20,43 +20,79 @@ namespace HOKM.Code
             return -1;
         }
 
-        public static Card GetCard(string suit, Card[] pack, Card[] played, List<Card> memory)
+        public static Card GetCard(string suit, int turn, Card[] pack, Card[] played, List<Card> memory)
         {
 
-            // Finding the highest card played in this suit:
+            Card selected = new Card(suit, "f");
             string highest = "e";
 
-            foreach (Card card in memory)     
-                if (card.GetCardType() == suit && GetPower(card.GetCardRank()) > GetPower(highest))
-                    highest = card.GetCardRank();
+            if (turn == 3)
+            {
+                // Finding the highest card played:
+                foreach (Card card in played)
+                    if (card.GetCardType() == suit && GetPower(card.GetCardRank()) > GetPower(highest))
+                        highest = card.GetCardRank();
 
-            foreach (Card card in played)
-                if (card.GetCardType() == suit && GetPower(card.GetCardRank()) > GetPower(highest))
-                    highest = card.GetCardRank();
+                if (highest == "e")
+                    highest = "f";
 
-            if (highest == "e")
-                highest = "f";
+                // Checking if I have a winning card of said suit:
+                string min = "f";
 
-            // Checking if I have the highest card of said suit:
-            Card selected = new Card(suit, "f");
-            foreach (Card card in pack)
-                if (card.GetCardType() == suit &&
-                    GetPower(card.GetCardRank()) == GetPower(highest) - 1 &&
-                    GetPower(card.GetCardRank()) < GetPower(selected.GetCardRank()))
-                {
-                    selected.SetRank(card.GetCardRank());
-                }
-
-            // Playing my lowest card if not:
-            if (selected.GetCardRank() == "f")
                 foreach (Card card in pack)
-                    if (GetPower(card.GetCardRank()) < GetPower(selected.GetCardRank()))
+                    if (card.GetCardType() == suit &&
+                        GetPower(card.GetCardRank()) == GetPower(highest) - 1 &&
+                        GetPower(card.GetCardRank()) < GetPower(selected.GetCardRank()) &&
+                        GetPower(card.GetCardRank()) < GetPower(min))
                     {
-                        selected.SetType(card.GetCardType());
                         selected.SetRank(card.GetCardRank());
                     }
 
+                // Playing my lowest card if not:
+                if (selected.GetCardRank() == "f")
+                    foreach (Card card in pack)
+                        if (GetPower(card.GetCardRank()) < GetPower(selected.GetCardRank()))
+                        {
+                            selected.SetType(card.GetCardType());
+                            selected.SetRank(card.GetCardRank());
+                        }
+            }
+
+            else
+            {
+                // Finding the highest card played in this suit:
+                foreach (Card card in memory)
+                    if (card.GetCardType() == suit && GetPower(card.GetCardRank()) > GetPower(highest))
+                        highest = card.GetCardRank();
+
+                foreach (Card card in played)
+                    if (card.GetCardType() == suit && GetPower(card.GetCardRank()) > GetPower(highest))
+                        highest = card.GetCardRank();
+
+                if (highest == "e")
+                    highest = "f";
+
+                // Checking if I have the highest card of said suit:
+                foreach (Card card in pack)
+                    if (card.GetCardType() == suit &&
+                        GetPower(card.GetCardRank()) == GetPower(highest) - 1 &&
+                        GetPower(card.GetCardRank()) < GetPower(selected.GetCardRank()))
+                    {
+                        selected.SetRank(card.GetCardRank());
+                    }
+
+                // Playing my lowest card if not:
+                if (selected.GetCardRank() == "f")
+                    foreach (Card card in pack)
+                        if (GetPower(card.GetCardRank()) < GetPower(selected.GetCardRank()))
+                        {
+                            selected.SetType(card.GetCardType());
+                            selected.SetRank(card.GetCardRank());
+                        }
+            }
+
             return selected;
+
         }
     }
 }
