@@ -71,7 +71,7 @@ namespace HOKM.Code
             return selected;
         }
 
-        public static Card ChooseCard(int counter, string suit, string strong, int partner_id, int turn, Card[] pack, Card[] played_cards)
+        public static Card ChooseCard(int counter, string suit, string strong, int id,  int partner_id, Card[] pack, Card[] played_cards, string[] discover)
         {
             Card selected = pack[0];
 
@@ -95,7 +95,7 @@ namespace HOKM.Code
 
             for (int i = 0; i < played_cards.Length; i++)
             {
-                if (played_cards[i].GetCardType() == strong && GetStrongCount(pack, strong) == 0)
+                if (played_cards[i].GetCardType() == strong && GetStrongCount(pack, strong) == 0) //if strong played and i have none
                     return minCard;
             }
 
@@ -107,10 +107,29 @@ namespace HOKM.Code
                 if (first_card.GetCardType() == pack[i].GetCardType())
                     have_type = true;
             }
-            if (current_winner == partner_id && !have_type)
+            if (current_winner == partner_id && !have_type) //if partner is winning and pack doesnt contain the type
             {
                 selected = EducatedRandomNoStrong(pack,strong);
             }
+
+            int[] ord = Test.GetOrder(counter);
+            int myturn = Array.IndexOf(ord, id)+1;
+            int partner_turn = Array.IndexOf(ord, partner_id) + 1;
+            if (myturn != 1)
+            {
+                int[] kills = new int[4];
+                for (int i = 0; i < 4; i++)
+                    kills[i] = 0;
+                for (int i = 0; i < played_cards.Length; i++)
+                {
+                    if (first_card.GetCardType() != played_cards[i].GetCardType() && first_card.GetCardType() != strong)
+                        kills[i] = 1;
+                }
+                int last_killer = Array.LastIndexOf(kills, 1) + 1;
+                if(last_killer == partner_turn) //if partner was the last to kill
+                    selected = EducatedRandomNoStrong(pack, strong);
+            }
+
             return selected;
         }
     }

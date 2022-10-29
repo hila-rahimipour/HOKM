@@ -480,7 +480,7 @@ namespace HOKM.Code
 
             int strong_counter=0;
             Card my_card=new Card("DIAMONDS", "rank_A");
-            if (!have_type && GetCurrentWinner()!=partner_id )
+            if (!have_type && GetCurrentWinner(played_cards,counter)!=partner_id )
             {
                 if (!killed_enemy)
                 {
