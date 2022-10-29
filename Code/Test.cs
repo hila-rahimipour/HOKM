@@ -284,23 +284,7 @@ namespace HOKM.Code
 
             Card selected = pack[0];
             // Algorithm
-            for(int i = 0; i < played_cards.Length; i++)
-            {
-                if (played_cards[i].GetCardType() == strong && GetStrongCount() == 0)
-                    selected = StrongPlayedAndNoStrongInPack(counter, played_cards);
-            }
-            Card first_card = played_cards[GetOrder(counter)[0]];
-            int current_winner = GetCurrentWinner(played_cards, counter);
-            bool have_type = false;
-            for (int i = 0; i < pack.Length; i++)
-            {
-                if (first_card.GetCardType() == pack[i].GetCardType())
-                    have_type = true;
-            }
-            if (current_winner == partner_id && !have_type)
-            {
-                selected = PutRandomCard();
-            }
+            
             string format = counter + "played_card:" + selected.GetCardType() + "*" + selected.GetCardRank();
             return format;
         }
@@ -461,46 +445,7 @@ namespace HOKM.Code
           
 
         }
-        public static int[] GetTypeCount()
-        {
-            //returns an array with how many cards of each type are in pack
-            int[] type_count = { 0, 0, 0, 0 };
-            foreach (Card card in pack)
-            {
-                if (card.GetCardType() == "SPADES")
-                    type_count[0]++;
-                else if (card.GetCardType() == "CLUBS")
-                    type_count[1]++;
-                else if (card.GetCardType() == "DIAMONDS")
-                    type_count[2]++;
-                else if (card.GetCardType() == "HEARTS")
-                    type_count[3]++;
-            }
-            return type_count;
-        }
-        public static Card StrongPlayedAndNoStrongInPack(int counter, Card[] played_cards)
-        {
-            string[] types = { "SPADES", "CLUBS", "DIAMONDS", "HEARTS" };
-            int[] type_count = GetTypeCount();
-            string most_common = "";
-            int max = 0;
-            for (int i = 0; i < 4; i++)
-            {
-                if (type_count[i] > max)
-                {
-                    max = type_count[i];
-                    most_common = types[i];
-                }
-            }
 
-            Card minCard = new Card(most_common, "rank_A");
-            for (int i = 0; i < pack.Length; i++)
-            {
-                if (pack[i].GetValue() < minCard.GetValue())
-                    minCard = pack[i];
-            }
-            return minCard;
-        }
         public static Card killSmall (int counter, Card[] played_cards)
         {
             int begginer = GetOrder(counter)[0];
