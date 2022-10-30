@@ -377,8 +377,9 @@ namespace HOKM.Code
                     if (ID == 4)
                         return new int[4] {1, 3, 2, 4};
                     break;
+                
             }
-
+            return new int[4]{ 0, 0, 0, 0};
         }
         public static void Discover(int counter, Card[] played_cards)
         {
@@ -517,7 +518,8 @@ namespace HOKM.Code
             }
             if (my_card.GetCardRank()!="rank_A" && my_card.GetCardType()!="DIAMONDS")                
                 return my_card;
-            //else
+            else
+                return new Card("NOTHING", "NOTHING");
                 //use other algorithem or put random card
 
         }
