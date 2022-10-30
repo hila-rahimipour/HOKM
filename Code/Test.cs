@@ -222,18 +222,24 @@ namespace HOKM.Code
                             if (maxNumFirst>10 && minNumFirst>5)
                                 return strong;
                             else
+                            {
                                 if (card.GetValue()>12)
                                     return card.GetCardType();
                                 else
                                     return strong;
+                            }
+                                
+                                    
                         else if (maxNumFirst<maxNumSec && minNumFirst<minNumSec)
                                 if (maxNumSec>10 && minNumSec>5)
                                     return new_strong;
                                 else
+                                {
                                     if (card.GetValue()>12)
-                                        return card.GetCardType();
-                                else
-                                    return new_strong;
+                                            return card.GetCardType();
+                                    else
+                                        return new_strong;
+                                }
                         else
                         {
                             if (maxNumFirst>maxNumSec)
