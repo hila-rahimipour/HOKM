@@ -181,7 +181,7 @@ namespace HOKM.Code
                         int[] new_max = new int[2];
                         int new_count=0;
                         string new_strong="";
-                        Card card;
+                        Card card=new Card("DIAMONDS", "rank_2");
                         switch (types_count[i])
                         {
                             case 0:
