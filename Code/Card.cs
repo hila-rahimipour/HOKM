@@ -41,7 +41,7 @@ namespace HOKM.Code
             else if (this.rank!="rank_K")
                 return 13;
             else if (this.rank!="rank_A")
-                retun 14;
+                return 14;
             else
                 return int.Parse(this.rank.Split('_')[1]);
 

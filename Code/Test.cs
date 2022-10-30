@@ -28,7 +28,7 @@ namespace HOKM.Code
         private static int enemy2=0;
         private static string[] discover = new string[5];
 
-        private string int count=-1;
+        private static int count=-1;
 
         //0-SPADES, 1-CLUBS, 2-DIAMONDS, 3-HEARTS
         private static int[] big_card = {14, 14, 14, 14};
@@ -134,12 +134,16 @@ namespace HOKM.Code
                     {
                         case "SPADES":
                             types_count[0]++;
+                            break;
                         case "CLUBS":
                             types_count[1]++;
+                            break;
                         case "DIAMONDS":
                             types_count[2]++;
+                            break;
                         case "HEARTS":
                             types_count[3]++;
+                            break;
                     }
                 }
                 int max_cards = types_count[0];
@@ -154,12 +158,16 @@ namespace HOKM.Code
                         {
                             case 0:
                                 strong="SPADES";
+                                break;
                             case 1:
                                 strong="CLUBS";
+                                break;
                             case 2:
                                 strong = "DIAMONS";
+                                break;
                             case 3:
                                 strong = "HEARTS";
+                                break;
                         }
                     }
                 }
@@ -172,17 +180,21 @@ namespace HOKM.Code
 
                         int[] new_max = new int[2];
                         int new_count=0;
-                        string new_strong;
+                        string new_strong="";
                         switch (types_count[i])
                         {
                             case 0:
                                 new_strong="SPADES";
+                                break;
                             case 1:
                                 new_strong="CLUBS";
+                                break;
                             case 2:
                                 new_strong = "DIAMONS";
+                                break;
                             case 3:
                                 new_strong = "HEARTS";
+                                break;
                         }
 
                         for (int j=0; j < first_five.Length; j++)
@@ -194,8 +206,8 @@ namespace HOKM.Code
                             }
                             if (first_five[i].GetCardType() == new_strong)
                             {
-                                new_max[count_max]=first_five[i].GetValue();
-                                count_max++;
+                                new_max[new_count]=first_five[i].GetValue();
+                                new_count++;
                             }
                         }
                         int maxNumFirst = Math.Max(max_count_values[0], max_count_values[1]);
@@ -255,8 +267,8 @@ namespace HOKM.Code
                 return "GAME_OVER";
             else if (mes.Contains("round end"))
             {
-                Card round_card[] = new Card[4];
-                string[] cards = mes.Split('round_cards:')[1].Split('|');
+                Card[] round_card = new Card[4];
+                string[] cards = mes.Substring(mes.IndexOf("round_cards: ")+13).Split('|');
                 for (int i=0; i < round_card.Length; i++)
                 {
                     round_card[i]=new Card(cards[i].Split('*')[0], cards[i].Split('*')[1]);
@@ -291,43 +303,43 @@ namespace HOKM.Code
                 case 0:
                     //im first
                     if (ID == 1)
-                        return {1, 3, 2, 4};
+                        return new int[4]{1, 3, 2, 4};
                     if (ID == 2)
-                        return {2, 4, 1, 3};
+                        return new int[4]{2, 4, 1, 3};
                     if (ID == 3)
-                        return {3, 2, 4, 1};
+                        return new int[4]{3, 2, 4, 1};
                     if (ID == 4)
-                        return {4, 1, 3, 2};
+                        return new int[4]{4, 1, 3, 2};
                 case 1:
                     //im second
                     if (ID == 1)
-                        return {4, 1, 3, 2};
+                        return new int[4] {4, 1, 3, 2};
                     if (ID == 2)
-                        return {3, 2, 4, 1};
+                        return new int[4] {3, 2, 4, 1};
                     if (ID == 3)
-                        return {1, 3, 2, 4};
+                        return new int[4] {1, 3, 2, 4};
                     if (ID == 4)
-                        return {2, 4, 1, 3};
+                        return new int[4] {2, 4, 1, 3};
                 case 2:
                     //im third
                     if (ID == 1)
-                        return {2, 4, 1, 3};
+                        return new int[4] {2, 4, 1, 3};
                     if (ID == 2)
-                        return {1, 3, 2, 4};
+                        return new int[4] {1, 3, 2, 4};
                     if (ID == 3)
-                        return {4, 1, 3, 2};
+                        return new int[4] {4, 1, 3, 2};
                     if (ID == 4)
-                        return {3, 2, 4, 1};
+                        return new int[4] {3, 2, 4, 1};
                 case 3:
                     //im fourth
                     if (ID == 1)
-                        return {3, 2, 4, 1};
+                        return new int[4] {3, 2, 4, 1};
                     if (ID == 2)
-                        return {4, 1, 3, 2};
+                        return new int[4] {4, 1, 3, 2};
                     if (ID == 3)
-                        return {2, 4, 1, 3};
+                        return new int[4] {2, 4, 1, 3};
                     if (ID == 4)
-                        return {1, 3, 2, 4};
+                        return new int[4] {1, 3, 2, 4};
 
             }
 
@@ -455,7 +467,7 @@ namespace HOKM.Code
             string[] kills = new string[4];
             for (int i=0; i<partner_discover;i++)
                 if (partner_discover[i].Contains("KILL"))
-                    kills[i] = partner_discover[i].Split('KILL ')[1];
+                    kills[i] = partner_discover[i].Split("KILL ")[1];
             
             Card my_card = new Card("DIAMONDS", "rank_A");
             for (int i=0; i<pack.Length; i++)
@@ -468,7 +480,7 @@ namespace HOKM.Code
             }
             if (my_card.GetCardRank()!="rank_A" && my_card.GetCardType()!="DIAMONDS")                
                 return my_card;
-            else
+            //else
                 //use other algorithem or put random card
 
         }
