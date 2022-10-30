@@ -9,6 +9,9 @@ namespace HOKM.Code
     public class Card
     {
 
+        static char[] TYPES = { 'e', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'J', 'Q', 'K', 'A', 'f' };
+
+
         private string type;
         private string rank;
         private int player;
@@ -39,6 +42,14 @@ namespace HOKM.Code
         public void SetTurn(int turn)
         {
             this.turn = turn;
+        }
+        public int GetValue()
+        {
+            char pow = type[type.Length - 1];
+            for (int i = 0; i < TYPES.Length; i++)
+                if (TYPES[i] == pow)
+                    return i;
+            return -1;
         }
     }
 }

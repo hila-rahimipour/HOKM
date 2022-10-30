@@ -52,6 +52,7 @@
     <Compile Include="Code\Card.cs" />
     <Compile Include="Code\Game.cs" />
     <Compile Include="Code\Networking.cs" />
+    <Compile Include="Code\REAL_STARTEGY.cs" />
     <Compile Include="Code\Strategy.cs" />
     <Compile Include="Code\Test.cs" />
     <Compile Include="Form1.cs">
