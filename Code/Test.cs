@@ -181,6 +181,7 @@ namespace HOKM.Code
                         int[] new_max = new int[2];
                         int new_count=0;
                         string new_strong="";
+                        Card card;
                         switch (types_count[i])
                         {
                             case 0:
@@ -204,11 +205,13 @@ namespace HOKM.Code
                                 max_count_values[count_max] = first_five[i].GetValue();
                                 count_max++;
                             }
-                            if (first_five[i].GetCardType() == new_strong)
+                            else if (first_five[i].GetCardType() == new_strong)
                             {
                                 new_max[new_count]=first_five[i].GetValue();
                                 new_count++;
                             }
+                            else
+                                card=first_five[i];
                         }
                         int maxNumFirst = Math.Max(max_count_values[0], max_count_values[1]);
                         int minNumFirst = Math.Min(max_count_values[0], max_count_values[1]);
@@ -216,9 +219,21 @@ namespace HOKM.Code
                         int maxNumSec = Math.Max(new_max[0], new_max[1]);
                         int minNumSec = Math.Min(new_max[0], new_max[1]);
                         if (maxNumFirst>maxNumSec && minNumFirst>minNumSec)
-                            return strong;
+                            if (maxNumFirst>10 && minNumFirst>5)
+                                return strong;
+                            else
+                                if (card.GetValue()>12)
+                                    return card.GetCardType();
+                                else
+                                    return strong;
                         else if (maxNumFirst<maxNumSec && minNumFirst<minNumSec)
-                            return new_strong;
+                                if (maxNumSec>10 && minNumSec>5)
+                                    return new_strong;
+                                else
+                                    if (card.GetValue()>12)
+                                        return card.GetCardType();
+                                else
+                                    return new_strong;
                         else
                         {
                             if (maxNumFirst>maxNumSec)
