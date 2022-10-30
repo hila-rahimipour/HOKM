@@ -10,6 +10,17 @@ namespace HOKM.Code
     internal class Test
     {
 
+        static char[] TYPES = { 'e', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'J', 'Q', 'K', 'A', 'f' };
+
+        static int GetPower(string type)
+        {
+            char pow = type[type.Length - 1];
+            for (int i = 0; i < TYPES.Length; i++)
+                if (TYPES[i] == pow)
+                    return i;
+            return -1;
+        }
+
         private static string SERVER_ADDR = "10.0.0.4";
         private static int SERVER_PORT = 55555;
         private static int ID = -1;
@@ -109,15 +120,158 @@ namespace HOKM.Code
             if (ruler_id == ID)
             {
                 Console.WriteLine("I am the ruler");
-                string five_mes = mes;
-                string[] five_string_arr = five_mes.Split('|');
+                string[] five_string_arr = mes.Split('|');
                 Card[] first_five = new Card[5];
                 for (int i = 0; i < 5; i++)
                     first_five[i] = new Card(five_string_arr[i].Split('*')[0], five_string_arr[i].Split('*')[1]);
 
                 string strong = "HEARTS";  // Placeholder
-                // Algorithm
-                return strong;
+                //0-SPADES, 1-CLUBS, 2-DIAMONDS, 3-HEARTS
+                int[] types_count = {0, 0, 0, 0};
+                int[] sum_cards = new int[4];
+
+                for (int i=0; i < first_five.Length; i++)
+                {
+                    switch (first_five[i].GetCardType())
+                    {
+                        case "SPADES":
+                            types_count[0]++;
+                            sum_cards[0] += GetPower(first_five[i].GetCardRank());
+                            break;
+                        case "CLUBS":
+                            types_count[1]++;
+                            sum_cards[1] += GetPower(first_five[i].GetCardRank());
+                            break;
+                        case "DIAMONDS":
+                            types_count[2]++;
+                            sum_cards[2] += GetPower(first_five[i].GetCardRank());
+                            break;
+                        case "HEARTS":
+                            types_count[3]++;
+                            sum_cards[3] += GetPower(first_five[i].GetCardRank());
+                            break;
+                    }
+                }
+
+                int max = 0;
+                int index = 0;
+                for (int i = 0; i < 4; i++)
+                {
+                    if (types_count[i] * sum_cards[i] > max)
+                    {
+                        index = i;
+                        max = types_count[i] * sum_cards[i];
+                    }
+                }
+
+                string[] names = { "SPADES", "CLUBS", "DIAMONDS", "HEARTS" };
+
+                return names[index];
+
+
+                //int max_cards = types_count[0];
+                //for (int i=0; i < types_count.Length; i++)
+                //{
+                //    if (types_count[i] > max_cards)
+                //    {
+                //        max_cards = types_count[i];
+                //        switch (i)
+                //        {
+                //            case 0:
+                //                strong="SPADES";
+                //                break;
+                //            case 1:
+                //                strong="CLUBS";
+                //                break;
+                //            case 2:
+                //                strong = "DIAMONS";
+                //                break;
+                //            case 3:
+                //                strong = "HEARTS";
+                //                break;
+                //        }
+                //    }
+                //}
+                //for (int i=0; i<types_count.Length; i++)
+                //{
+                //    if (max_cards == types_count[i])
+                //    {
+                //        int[] max_count_values = new int[2];
+                //        int count_max = 0;
+
+                //        int[] new_max = new int[2];
+                //        int new_count=0;
+                //        string new_strong="";
+                //        Card card=new Card("DIAMONDS", "rank_2");
+                //        switch (types_count[i])
+                //        {
+                //            case 0:
+                //                new_strong="SPADES";
+                //                break;
+                //            case 1:
+                //                new_strong="CLUBS";
+                //                break;
+                //            case 2:
+                //                new_strong = "DIAMONS";
+                //                break;
+                //            case 3:
+                //                new_strong = "HEARTS";
+                //                break;
+                //        }
+
+                //        for (int j=0; j < first_five.Length; j++)
+                //        {
+                //            if (first_five[i].GetCardType() == strong)
+                //            {
+                //                max_count_values[count_max] = first_five[i].GetValue();
+                //                count_max++;
+                //            }
+                //            else if (first_five[i].GetCardType() == new_strong)
+                //            {
+                //                new_max[new_count]=first_five[i].GetValue();
+                //                new_count++;
+                //            }
+                //            else
+                //                card=first_five[i];
+                //        }
+                //        int maxNumFirst = Math.Max(max_count_values[0], max_count_values[1]);
+                //        int minNumFirst = Math.Min(max_count_values[0], max_count_values[1]);
+
+                //        int maxNumSec = Math.Max(new_max[0], new_max[1]);
+                //        int minNumSec = Math.Min(new_max[0], new_max[1]);
+                //        if (maxNumFirst>maxNumSec && minNumFirst>minNumSec)
+                //            if (maxNumFirst>10 && minNumFirst>5)
+                //                return strong;
+                //            else
+                //            {
+                //                if (card.GetValue()>12)
+                //                    return card.GetCardType();
+                //                else
+                //                    return strong;
+                //            }
+                                
+                                    
+                //        else if (maxNumFirst<maxNumSec && minNumFirst<minNumSec)
+                //                if (maxNumSec>10 && minNumSec>5)
+                //                    return new_strong;
+                //                else
+                //                {
+                //                    if (card.GetValue()>12)
+                //                            return card.GetCardType();
+                //                    else
+                //                        return new_strong;
+                //                }
+                //        else
+                //        {
+                //            if (maxNumFirst>maxNumSec)
+                //                return strong;
+                //            else
+                //               return new_strong;
+                //        }
+
+                //    }
+                //}
+
             }
 
             return null;
