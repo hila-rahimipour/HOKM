@@ -273,7 +273,7 @@ namespace HOKM.Code
                 {
                     round_card[i]=new Card(cards[i].Split('*')[0], cards[i].Split('*')[1]);
                 }
-                Discover(counter, round_card);
+                Discover(count, round_card);
 
 
             }
@@ -295,7 +295,7 @@ namespace HOKM.Code
             string format = counter + "played_card:" + selected.GetCardType() + "*" + selected.GetCardRank();
             return format;
         }
-        public static int GetOrder(int counter)
+        public static int[] GetOrder(int counter)
         {
             switch (counter)
             {
@@ -304,43 +304,58 @@ namespace HOKM.Code
                     //im first
                     if (ID == 1)
                         return new int[4]{1, 3, 2, 4};
+                    break;
                     if (ID == 2)
                         return new int[4]{2, 4, 1, 3};
+                    break;
                     if (ID == 3)
                         return new int[4]{3, 2, 4, 1};
+                    break;
                     if (ID == 4)
                         return new int[4]{4, 1, 3, 2};
+                    break;
                 case 1:
                     //im second
                     if (ID == 1)
                         return new int[4] {4, 1, 3, 2};
+                    break;
                     if (ID == 2)
                         return new int[4] {3, 2, 4, 1};
+                    break;
                     if (ID == 3)
                         return new int[4] {1, 3, 2, 4};
+                    break;
                     if (ID == 4)
                         return new int[4] {2, 4, 1, 3};
+                    break;
                 case 2:
                     //im third
                     if (ID == 1)
                         return new int[4] {2, 4, 1, 3};
+                    break;
                     if (ID == 2)
                         return new int[4] {1, 3, 2, 4};
+                    break;
                     if (ID == 3)
                         return new int[4] {4, 1, 3, 2};
+                    break;
                     if (ID == 4)
                         return new int[4] {3, 2, 4, 1};
+                    break;
                 case 3:
                     //im fourth
                     if (ID == 1)
                         return new int[4] {3, 2, 4, 1};
+                    break;
                     if (ID == 2)
                         return new int[4] {4, 1, 3, 2};
+                    break;
                     if (ID == 3)
                         return new int[4] {2, 4, 1, 3};
+                    break;
                     if (ID == 4)
                         return new int[4] {1, 3, 2, 4};
-
+                    break;
             }
 
         }
@@ -361,7 +376,7 @@ namespace HOKM.Code
             //1 3 2 4
 
             Card first_card = played_cards[GetOrder(counter)[0]];
-            for (int i = 0; i < played_cards.Length; i++)
+            for (int i = 1; i < played_cards.Length; i++)
             {
                 if (first_card.GetCardType()() != played_cards[i].GetCardType()() && first_card.GetCardType()()!=strong)
                     discover[i+1]= discover[i+1] + "KILL " + first_card.GetCardType()()+"|";
@@ -389,7 +404,7 @@ namespace HOKM.Code
         public static Card killSmall (int counter, Card[] played_cards)
         {
             int begginer = GetOrder(counter)[0];
-            Card first_card = Card[begginer];
+            Card first_card = played_cards[begginer];
             bool have_type = false;
             for (int i=0; i<pack.Length; i++)
             {
@@ -420,7 +435,7 @@ namespace HOKM.Code
 
             int strong_counter=0;
             Card my_card=new Card("DIAMONDS", "rank_A");
-            if (!have_type && GetCurrentWinner()!=partner_id )
+            if (!have_type && GetCurrentWinner(played_cards,counter)!=partner_id )
             {
                 if (!killed_enemy)
                 {
@@ -465,17 +480,18 @@ namespace HOKM.Code
         {
             string[] partner_discover = discover[partner_id].Split('|');
             string[] kills = new string[4];
-            for (int i=0; i<partner_discover;i++)
+            for (int i=0; i<partner_discover.Length;i++)
                 if (partner_discover[i].Contains("KILL"))
-                    kills[i] = partner_discover[i].Split("KILL ")[1];
+                    kills[i] = partner_discover[i].Substring(partner_discover[i].IndexOf("KILL ")+5);
             
             Card my_card = new Card("DIAMONDS", "rank_A");
             for (int i=0; i<pack.Length; i++)
             {
                 for (int j=0; j<kills.Length; j++)
-                    if (pack[i].GetCardType()() == kills[j])
-                        if (my_card.GetValue() > pack[i].GetValue())
-                            my_card = pack[i];
+                    if (kills[i]!=null)
+                        if (pack[i].GetCardType() == kills[j])
+                            if (my_card.GetValue() > pack[i].GetValue())
+                                my_card = pack[i];
 
             }
             if (my_card.GetCardRank()!="rank_A" && my_card.GetCardType()!="DIAMONDS")                
