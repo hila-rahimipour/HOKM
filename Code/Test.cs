@@ -399,12 +399,12 @@ namespace HOKM.Code
             Card first_card = played_cards[GetOrder(counter)[0]];
             for (int i = 1; i < played_cards.Length; i++)
             {
-                if (first_card.GetCardType()() != played_cards[i].GetCardType()() && first_card.GetCardType()()!=strong)
-                    discover[i+1]= discover[i+1] + "KILL " + first_card.GetCardType()()+"|";
+                if (first_card.GetCardType() != played_cards[i].GetCardType() && first_card.GetCardType()!=strong)
+                    discover[i+1]= discover[i+1] + "KILL " + first_card.GetCardType()+"|";
             }
-            if (first_card.GetCardType()()==strong)
+            if (first_card.GetCardType()==strong)
                 for (int i=0; i<played_cards.Length;i++)
-                    if (first_card.GetCardType()() != played_cards[i].GetCardType()())
+                    if (first_card.GetCardType() != played_cards[i].GetCardType())
                         discover[i + 1] = discover[i+1]+"NO STRONG|";
             int current_winner = GetCurrentWinner(played_cards,counter);
             Card winner_card = GetCurrentWinnerCard(played_cards,counter);
