@@ -9,7 +9,7 @@ namespace HOKM.Code
     public class Card
     {
 
-        static string[] TYPES = { "e", "rank_2", "rank_3", "rank_4", "rank_5", "rank_6", "rank_7", "rank_8",
+        static string[] RANKS = { "e", "rank_2", "rank_3", "rank_4", "rank_5", "rank_6", "rank_7", "rank_8",
                                     "rank_9", "rank_10", "rank_J", "rank_Q", "rank_K", "rank_A", "f"};
 
 
@@ -25,7 +25,7 @@ namespace HOKM.Code
         public Card(string type, int rank)
         {
             this.type = type;
-            this.rank = TYPES[rank];
+            this.rank = RANKS[rank];
         }
 
         public string GetCardType() => type;
@@ -40,8 +40,8 @@ namespace HOKM.Code
         }
         public int GetValue()
         {
-            if (TYPES.Contains(type))
-                return Array.IndexOf(TYPES, type);
+            if (RANKS.Contains(rank))
+                return Array.IndexOf(RANKS, rank);
             return -1;
         }
     }

@@ -3,12 +3,18 @@ from server import Server
 from game import Game
 import random
 import time
+import pickle
+import copy
+import os
+import sys
 
 
+print("testing branch")
 BAD_CARD_MSG = "bad_card"
 BAD_PLAY_MSG = "bad_play"
 
 DELAY_BETWEEN_TURNS_IN_SEC = 0.6
+GENERATE_ERROR_IN_TURN = -1
 
 
 def list_to_str(lst, sep="|"):
@@ -33,8 +39,12 @@ class Handler(Server):
 
         self.players = []
         self.game = None
+        self.backup_game = None
+        self.played_cards_dict_backup = None
         self.current_player = None
         self.played_cards_dict = {1: "", 2: "", 3: "", 4: ""}
+
+        self.turns = 0
 
     def _handle_data(self, client_id: int, msg: str, msg_type="data"):
         """
@@ -58,6 +68,37 @@ class Handler(Server):
 
                 card = msg[len("play_card:"):]
                 self.handle_play_card(client_id, card)
+            elif msg == "request_start_info":
+
+                self.request_start_info(client_id)
+            elif msg == "request_turn":
+
+                self.request_start_turn(client_id)
+
+    def request_start_turn(self, client_id):
+        current_p = self.game.get_current_player_turn()
+
+        if current_p.player_id != client_id:
+            return
+
+        self.current_player = current_p
+
+        round_status = self.game.get_round_state()
+
+        played_cards_by_id = [self.played_cards_dict[1], self.played_cards_dict[2],
+                              self.played_cards_dict[3], self.played_cards_dict[4]]
+
+        msg = f"played_suit:{'' if round_status.played_suit is None else round_status.played_suit.name},played_cards:{list_to_str(played_cards_by_id)}"
+        self.send_message(current_p.player_id, msg)
+
+    def request_start_info(self, client_id):
+        """
+        when error in client, client can request the start info:cards, teams and strong
+        """
+        player = self.players[client_id - 1]
+
+        self.send_message(
+            player.player_id, f"{list_to_str(player.hand)},teams:{list_to_str(self.game.teams)},strong:{self.game.strong_suit.name}")
 
     def handle_set_strong_suit(self, client_id, suit):
         """
@@ -80,6 +121,10 @@ class Handler(Server):
             self.send_message(client_id, "ok")
 
             self.game.hand_cards_for_all()
+
+            self.backup_game = copy.deepcopy(self.game)
+            self.played_cards_dict_backup = copy.deepcopy(
+                self.played_cards_dict)
 
             # sends remaining cards for all players in format: suit*rank|suit*rank...
             for player in self.game.players:
@@ -123,6 +168,9 @@ class Handler(Server):
         if self.current_player is None or client_id != self.current_player.player_id:
             return
 
+        # temp!!
+        self.turns += 1
+
         lst_card = str_card.split("*")
 
         if len(lst_card) != 2:
@@ -133,8 +181,18 @@ class Handler(Server):
         if suit not in Suit.__members__ or rank not in Rank.__members__:
             self.send_message(client_id, BAD_CARD_MSG)
 
+        self.backup_game = copy.deepcopy(self.game)
+        self.played_cards_dict_backup = copy.deepcopy(self.played_cards_dict)
+
+        # temp!!
+        if self.turns == GENERATE_ERROR_IN_TURN:
+            int("asda")
+
         card = Card(Suit[suit], Rank[rank])
         valid, round_over_team = self.game.play_card(self.current_player, card)
+
+        self.backup_game = copy.deepcopy(self.game)
+        self.played_cards_dict_backup = copy.deepcopy(self.played_cards_dict)
 
         if not valid:
             self.send_message(client_id, BAD_PLAY_MSG)
@@ -151,7 +209,7 @@ class Handler(Server):
             scores = game_state.scores
 
             played_cards_by_id = [self.played_cards_dict[1], self.played_cards_dict[2],
-                              self.played_cards_dict[3], self.played_cards_dict[4]]
+                                  self.played_cards_dict[3], self.played_cards_dict[4]]
 
             self.send_all(
                 f"round_winner:{round_over_team},scores:{list_to_str([f'{team}*{score}' for team, score in scores.items()])},round_cards:{list_to_str(played_cards_by_id)}")
@@ -189,21 +247,34 @@ class Handler(Server):
         :return: None
         """
 
-        team1 = Team(self.players[:2])
-        team2 = Team(self.players[2:])
+        if os.path.isfile('game_data.bak') and os.stat("game_data.bak").st_size > 0:
+            with open("game_data.bak", "rb") as f:
+                #pickle_game = pickle.load(f)
+                data = f.read()
+                pickle_game, pickle_dict = data.split(b"ThisIsASeperator")
 
-        self.game = Game(self.players, [team1, team2])
+            self.game = pickle.loads(pickle_game)
+            self.played_cards_dict = pickle.loads(pickle_dict)
 
-        ruler = random.choice(self.game.players)
-        self.game.set_ruler(ruler)
+            print("starting game after crash")
 
-        self.send_all(f"ruler:{ruler.player_id}")
+            self.start_turn()
+        else:
+            team1 = Team(self.players[:2])
+            team2 = Team(self.players[2:])
 
-        self.game.hand_cards_for_all()
+            self.game = Game(self.players, [team1, team2])
 
-        # sends cards for all players in format: suit*rank|suit*rank...
-        for player in self.game.players:
-            self.send_message(player.player_id, list_to_str(player.hand))
+            ruler = random.choice(self.game.players)
+            self.game.set_ruler(ruler)
+
+            self.send_all(f"ruler:{ruler.player_id}")
+
+            self.game.hand_cards_for_all()
+
+            # sends cards for all players in format: suit*rank|suit*rank...
+            for player in self.game.players:
+                self.send_message(player.player_id, list_to_str(player.hand))
 
     def handle_player_disconnect(self, client_id):
         """
@@ -212,7 +283,7 @@ class Handler(Server):
         :return: None
         """
 
-        self.send_all(f"PLAYER_DISCONNECTED")
+        self.send_all(f"PLAYER_DISCONNECTED:{client_id}")
         self.run = False
 
     def handle_game_over(self):
@@ -220,6 +291,9 @@ class Handler(Server):
         sending the players the game is over and closing the server
         :return:
         """
+
+        with open("game_data.bak", "wb") as f:
+            f.write(b'')
 
         self.send_all(f"GAME_OVER")
         self.run = False
@@ -240,8 +314,24 @@ class Handler(Server):
 
         players_str = f"{player1_id1_str}|{player2_id3_str}|{player3_id2_str}|{player4_id4_str}"
 
-        self.send_to_server_gui(f"{players_str}")
+        self.send_to_server_gui(f"{players_str}%{score_str}")
+
+    def handle_error(self, t, value, tb):
+        print(
+            f"\n**ERROR**\ntype: {t.__name__}\nvalue: {value}\nline: {tb.tb_frame.f_lineno}")
+
+        with open("game_data.bak", "wb") as f:
+            #pickle.dump(self.backup_game, f)
+            pickle_data = pickle.dumps(self.backup_game)
+            pickle_data_dict = pickle.dumps(self.played_cards_dict_backup)
+            f.write(pickle_data + b"ThisIsASeperator" + pickle_data_dict)
+
+        self.emergency_send_to_all_clients()
+
+        self.close()
+        exit()
 
 
 a = Handler()
+sys.excepthook = a.handle_error
 a.start()

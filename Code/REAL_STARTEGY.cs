@@ -11,7 +11,7 @@ namespace HOKM.Code
     {
 
         private static string[] CARD_TYPES = { "SPADES", "CLUBS", "DIAMONDS", "HEARTS" };
-        private static string[] discover = new string[4];
+        private static string[] discover = { "", "", "", "" };
         private static int[] big_card = { 13, 13, 13, 13 };
 
 
@@ -19,29 +19,39 @@ namespace HOKM.Code
         {
             int highest = 0;
             foreach (Card card in played_cards)
-                if (card.GetCardType() == suit && card.GetValue() > highest)
+            {
+                if (card != null && card.GetCardType() == suit && card.GetValue() > highest)
                     highest = card.GetValue();
+                if (card != null)
+                {
+                    Console.WriteLine(card.GetValue());
+                    Console.WriteLine(card.GetCardType());
+                }
+            }
+            Console.WriteLine(highest);
 
             int lowest = 14;
             foreach (Card card in played_cards)
-                if (card.GetCardType() == suit && card.GetValue() < lowest)
+                if (card != null && card.GetCardType() == suit && card.GetValue() < lowest)
                     lowest = card.GetValue();
+            Console.WriteLine(lowest);
 
             Card lowestCard = new Card("", "f");
             Card highestCard = new Card("", "e");
             foreach (Card card in pack)
-                if (card.GetCardType() == suit && card.GetValue() < lowestCard.GetValue())
+                if (card != null && card.GetCardType() == suit && card.GetValue() < lowestCard.GetValue())
                     lowestCard = card;
-                else if (card.GetCardType() == suit && card.GetValue() > highestCard.GetValue())
+                else if (card != null && card.GetCardType() == suit && card.GetValue() > highestCard.GetValue())
                     highestCard = card;
 
             bool have_type = false;
             foreach (Card card in pack)
-                if (card.GetCardType() == suit)
+                if (card != null && card.GetCardType() == suit)
                 {
                     have_type = true;
                     break;
                 }
+            Console.WriteLine(have_type);
 
             int[] order = GetOrder(counter);
 
@@ -61,6 +71,8 @@ namespace HOKM.Code
                         enemy_killed = true;
                 }
             }
+            Console.WriteLine(enemy_killed);
+            Console.WriteLine(suit);
 
             string[] partner_discover = discover[partner_id - 1].Split('|');
             string[] kills = new string[4];
@@ -96,7 +108,7 @@ namespace HOKM.Code
                         }
                     if (!isKill)
                         foreach (Card card in pack)
-                            if (card.GetCardType() == CARD_TYPES[i] && card.GetValue() == big_card[i])
+                            if (card != null && card.GetCardType() == CARD_TYPES[i] && card.GetValue() == big_card[i])
                                 return card;
                 }
 
@@ -107,7 +119,7 @@ namespace HOKM.Code
                         selected = new Card("", "f");
                         foreach (Card card in pack)
                             if (kills[i] != "")
-                                if (card.GetCardType() == kills[i])
+                                if (card != null && card.GetCardType() == kills[i])
                                     if (card.GetValue() < selected.GetValue())
                                         selected = card;
                         if (selected.GetCardRank() != "f")
@@ -128,7 +140,8 @@ namespace HOKM.Code
                     {
                         int min = 14;
                         foreach (Card card in pack)
-                            if (card.GetCardType() == suit &&
+                            if (card != null &&
+                                card.GetCardType() == suit &&
                                 card.GetValue() > highest &&
                                 card.GetValue() < min)
                             {
@@ -148,7 +161,7 @@ namespace HOKM.Code
                         if (enemy_killed)
                         {
                             foreach (Card card in pack)
-                                if (card.GetCardType() == strong)
+                                if (card != null && card.GetCardType() == strong)
                                 {
                                     if (card.GetValue() > killer.GetValue() && card.GetValue() < selected.GetValue())
                                         selected = card;
@@ -160,7 +173,7 @@ namespace HOKM.Code
                         {
                             int min = 14;
                             foreach (Card card in pack)
-                                if (card.GetCardType() == strong &&
+                                if (card != null && card.GetCardType() == strong &&
                                     card.GetValue() < min)
                                 {
                                     selected = card;
@@ -178,10 +191,10 @@ namespace HOKM.Code
                 if (have_type)
                 {
                     foreach (Card card in pack)
-                        if (big_card[Array.IndexOf(CARD_TYPES, card.GetCardType())] == card.GetValue() && card.GetCardType() == suit && suit != strong)
+                        if (card != null && big_card[Array.IndexOf(CARD_TYPES, card.GetCardType())] == card.GetValue() && card.GetCardType() == suit && suit != strong)
                             return card;
 
-                    int nextPlayer = order[Array.IndexOf(order, ID) + 1] - 1;
+                    int nextPlayer = order[(Array.IndexOf(order, ID) + 1) % 4] - 1;
                     string[] data = discover[nextPlayer].Split('|');
                     bool killSuit = false;
                     bool noStrong = false;
@@ -207,7 +220,8 @@ namespace HOKM.Code
                             {
                                 int min = 14;
                                 foreach (Card card in pack)
-                                    if (card.GetCardType() == suit &&
+                                    if (card != null &&
+                                        card.GetCardType() == suit &&
                                         card.GetValue() > highest &&
                                         card.GetValue() < min)
                                     {
@@ -223,7 +237,8 @@ namespace HOKM.Code
                                 {
                                     int min = 14;
                                     foreach (Card card in pack)
-                                        if (card.GetCardType() == suit &&
+                                        if (card != null &&
+                                            card.GetCardType() == suit &&
                                             card.GetValue() > highest &&
                                             card.GetValue() < min)
                                         {
@@ -250,7 +265,8 @@ namespace HOKM.Code
                         {
                             int min = 14;
                             foreach (Card card in pack)
-                                if (card.GetCardType() == strong &&
+                                if (card != null &&
+                                    card.GetCardType() == strong &&
                                     card.GetValue() > killer.GetValue() &&
                                     card.GetValue() < min)
                                 {
@@ -264,7 +280,8 @@ namespace HOKM.Code
                         {
                             int min = 14;
                             foreach (Card card in pack)
-                                if (card.GetCardType() == strong &&
+                                if (card != null &&
+                                    card.GetCardType() == strong &&
                                     card.GetValue() < min)
                                 {
                                     selected = card;
@@ -293,7 +310,7 @@ namespace HOKM.Code
 
             foreach (Card card in pack)
             {
-                if (card.GetCardType() == strong && card.GetValue() == temp.GetValue())
+                if (card != null && card.GetCardType() == strong && card.GetValue() == temp.GetValue())
                 {
                     counter++;
                     while (playedValues.Contains(temp.GetValue()))
@@ -354,7 +371,7 @@ namespace HOKM.Code
             int[] order = { 1, 3, 2, 4 };
             int[] result = new int[4];
             for (int i = 0; i < 4; i++)
-                result[i] = order[(counter - 1 + i) % 4];
+                result[i] = order[(counter + i) % 4];
             return result;
         }
 
@@ -413,8 +430,13 @@ namespace HOKM.Code
         {
             int[] order = GetOrder(counter);
             Card current_winner_card = played_cards[order[0] - 1];
+            if (current_winner_card == null)
+                return -1;
             int current_winner_id = 1;
             foreach (int i in order)
+            {
+                if (played_cards[i - 1] == null)
+                    continue;
                 if ((current_winner_card.GetValue() < played_cards[i - 1].GetValue() &&
                     current_winner_card.GetCardType() == played_cards[i - 1].GetCardType())
                     ||
@@ -424,6 +446,7 @@ namespace HOKM.Code
                     current_winner_card = played_cards[i - 1];
                     current_winner_id = i;
                 }
+            }
             return current_winner_id;
         }
 
@@ -433,7 +456,10 @@ namespace HOKM.Code
         /// <param name="played_cards"> The cards played. </param>
         public static Card GetCurrentWinnerCard(string strong, Card[] played_cards, int counter)
         {
-            return played_cards[GetCurrentWinner(strong, played_cards, counter) - 1];
+            int winner = GetCurrentWinner(strong, played_cards, counter);
+            if (winner == -1)
+                return null;
+            return played_cards[winner - 1];
         }
 
 
@@ -445,7 +471,7 @@ namespace HOKM.Code
             foreach (Card card in pack)
             {
                 for (int i = 0; i < 4; i++)
-                    if (CARD_TYPES[i] == card.GetCardType())
+                    if (card != null && CARD_TYPES[i] == card.GetCardType())
                     {
                         index = i;
                         break;
@@ -460,7 +486,7 @@ namespace HOKM.Code
             int strong_counter = 0;
             for (int i = 0; i < pack.Length; i++)
             {
-                if (pack[i].GetCardType() == strong)
+                if (pack[i] != null && pack[i].GetCardType() == strong)
                     strong_counter++;
             }
             return strong_counter;
@@ -470,14 +496,18 @@ namespace HOKM.Code
         {
             // lowest card that isn't strong
             Card selected = pack[0];
+            for (int i = 0; i < 13; i++)
+                if (pack[i] != null)
+                    selected = pack[i];
+
             foreach (Card card in pack) //make sure we dont return trump card
-                if (card.GetCardType() != strong)
+                if (card != null && card.GetCardType() != strong)
                 {
                     selected.SetType(card.GetCardType());
                     selected.SetRank(card.GetCardRank());
                 }
             foreach (Card card in pack) // return lowest ranking card thats not a trump card
-                if (card.GetCardType() != strong)
+                if (card != null && card.GetCardType() != strong)
                     if (card.GetValue() < selected.GetValue())
                     {
                         selected.SetType(card.GetCardType());
@@ -490,14 +520,18 @@ namespace HOKM.Code
         {
             // lowest card that isn't strong
             Card selected = pack[0];
+            for (int i = 0; i < 13; i++)
+                if (pack[i] != null)
+                    selected = pack[i];
+
             foreach (Card card in pack) //make sure we dont return trump card
-                if (card.GetCardType() == suit)
+                if (card != null && card.GetCardType() == suit)
                 {
                     selected.SetType(card.GetCardType());
                     selected.SetRank(card.GetCardRank());
                 }
             foreach (Card card in pack) // return lowest ranking card thats not a trump card
-                if (card.GetCardType() == suit)
+                if (card != null && card.GetCardType() == suit)
                     if (card.GetValue() < selected.GetValue())
                     {
                         selected.SetType(card.GetCardType());

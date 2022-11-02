@@ -25,6 +25,8 @@ namespace HOKM
         private static Card[] pack;
         private static List<Card> playedStrongCards = new List<Card>();
         private static int[] points = new int[2];
+        private static int counter = -1;
+        private static int index = -1;
 
         public static EventWaitHandle waitHandle = new AutoResetEvent(false);
 
@@ -145,7 +147,7 @@ namespace HOKM
                 valueArray[i] = pack[i].GetValue();
             }
 
-            Array.Sort(valueArray, pack);
+            //Array.Sort(valueArray, pack);
 
             foreach (string team in teams)
             {
@@ -162,31 +164,31 @@ namespace HOKM
         public static void Play(Socket sock, GameScreen screen)
         {
             bool isGame = true;
-            string result;
-            int turn;
-            int index;
+            Card result;
+            string format;
 
             while (isGame)
             {
                 string mes = Networking.RecvMessage(sock);
+                Console.WriteLine("i do turn");
                 result = DoTurn(mes);
-                turn = int.Parse(result.Substring(0,1));
-                index = int.Parse(result.Substring(1,2));
-                result = result.Substring(1);
-
-                if (result == "GAME_OVER")
+                if (result == null)
+                {
                     isGame = false;
-                else
-                    while (true)
-                    {
-                        Networking.SendMessage(sock, result);
-                        
-                        string response = Networking.RecvMessage(sock);
-                        if (response == "ok")
-                            break;
-                        else if (response == "bad_play")
-                            result = DoTurn(mes);
-                    }
+                    return;
+                }
+                format = "play_card:" + result.GetCardType() + "*" + result.GetCardRank();
+                Console.WriteLine("i did turn");
+
+                Console.WriteLine(format);
+                Networking.SendMessage(sock, format);
+
+                Console.WriteLine("i sent card");
+                string response = Networking.RecvMessage(sock);
+                Console.WriteLine("i reciv " + response);
+                if (response == "bad_play")
+                    return;
+
 
                 // Round over:
                 string data = Networking.RecvMessage(sock);
@@ -212,29 +214,66 @@ namespace HOKM
                     playedCards[i] = c;
                 }
 
+                for (int i = 0; i < 13; i++)
+                    if (pack[i] == null)
+                        Console.WriteLine("null");
+                    else
+                        Console.WriteLine(pack[i].GetCardRank() + "_" + pack[i].GetCardType());
+                Console.WriteLine();
+
                 Func<Card, string> formatCard = (Card card) => card.GetCardRank().Substring(5) + card.GetCardType().Substring(0, 1);
 
-                screen.ShowTurn((-turn) % 4, index, formatCard(playedCards[(turn + 2) % 4]),
-                    formatCard(playedCards[(turn - 1) % 4]), formatCard(playedCards[(turn + 1) % 4]));
+                screen.ShowTurn((4 - counter) % 4, index, formatCard(playedCards[partner_id - 1]),
+                    formatCard(playedCards[partner_id]), formatCard(playedCards[(partner_id + 1) % 4]));
                 waitHandle.WaitOne();
                 ScreenBlink(screen, isWinner);
                 screen.UpdatePoints(points[0], points[1]);
 
-                REAL_STARTEGY.Discover(partner_id, strong, turn, playedCards, playedStrongCards);
+                for (int i = 0; i < 13; i++)
+                    if (pack[i] == null)
+                        Console.WriteLine("null");
+                    else
+                        Console.WriteLine(pack[i].GetCardRank() + "_" + pack[i].GetCardType());
+                Console.WriteLine();
+
+                //Console.WriteLine(Array.IndexOf(pack, result));
+                //pack[Array.IndexOf(pack, result)] = null;
+                //foreach (Card card in pack)
+                //{
+                //    if (card == null)
+                //        Console.Write("null  ");
+                //    else
+                //        Console.Write(card.GetCardType() + " " + card.GetCardRank() + "  ");
+                //}
+                //Console.WriteLine();
+
+                for (int i = 0; i < 13; i++)
+                    if (pack[i] == null)
+                        Console.WriteLine("null");
+                    else
+                        Console.WriteLine(pack[i].GetCardRank() + "_" + pack[i].GetCardType());
+
+                REAL_STARTEGY.Discover(partner_id, strong, counter, playedCards, playedStrongCards);
+                for (int i = 0; i < 13; i++)
+                    if (pack[i] == null)
+                        Console.WriteLine("null");
+                    else
+                        Console.WriteLine(pack[i].GetCardRank() + "_" + pack[i].GetCardType());
             }
         }
 
 
-        public static string DoTurn(string mes)
+        public static Card DoTurn(string mes)
         {
             if (mes == "GAME_OVER")
-                return "GAME_OVER";
+                return null;
 
             string[] data = mes.Split(',');
             string suit = data[0].Split(':')[1];
             string[] cards_str = data[1].Split(':')[1].Split('|');
+            Console.WriteLine(data[1].Split(':')[1]);
             Card[] played_cards = new Card[cards_str.Length];
-            int counter = 0;
+            counter = 0;
             for (int i = 0; i < cards_str.Length; i++)
                 if (cards_str[i] != "")
                 {
@@ -243,16 +282,10 @@ namespace HOKM
                 }
 
             Card selected = REAL_STARTEGY.DoTurn(ID, partner_id, suit, strong, points[0], points[1], played_cards, counter, pack, playedStrongCards);
+            index = Array.IndexOf(pack, selected);
+            pack[index] = null;
 
-            int index = Array.IndexOf(pack, selected);
-            string strIndex;
-            if (index < 10)
-                strIndex = "0" + index;
-            else
-                strIndex = index.ToString();
-
-            string format = counter + strIndex + "played_card:" + selected.GetCardType() + "*" + selected.GetCardRank();
-            return format;
+            return selected;
         }
 
         public static void ScreenBlink(GameScreen root, bool isWinner)
