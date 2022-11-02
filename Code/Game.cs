@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HOKM.Screens;
+using System.Net.Sockets;
 
 namespace HOKM.Code
 {
@@ -13,8 +15,9 @@ namespace HOKM.Code
 
         public static EventWaitHandle waitHandle = new AutoResetEvent(false);
 
-        public static void main(Form1 root)
+        public static void TurnAnim(GameScreen root, int first, int index, string friend, string enemy1, string enemy2)
         {
+            
             root.UpdateStrong('C');
 
             root.ShowTurn(0, 1, "4D", "3C", "AS");
@@ -29,7 +32,7 @@ namespace HOKM.Code
 
         }
 
-        public static void ScreenBlink(Form1 root, char color)
+        public static void ScreenBlink(GameScreen root, char color)
         {
             if (color == 'g')
                 root.BackColor = System.Drawing.Color.LightGreen;

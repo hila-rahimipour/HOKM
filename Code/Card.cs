@@ -9,13 +9,12 @@ namespace HOKM.Code
     public class Card
     {
 
-        static char[] TYPES = { 'e', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'J', 'Q', 'K', 'A', 'f' };
+        static string[] TYPES = { "e", "rank_2", "rank_3", "rank_4", "rank_5", "rank_6", "rank_7", "rank_8",
+                                    "rank_9", "rank_10", "rank_J", "rank_Q", "rank_K", "rank_A", "f"};
 
 
         private string type;
         private string rank;
-        private int player;
-        private int turn;
 
         public Card(string type, string rank)
         {
@@ -23,10 +22,14 @@ namespace HOKM.Code
             this.rank = rank;
         }
 
+        public Card(string type, int rank)
+        {
+            this.type = type;
+            this.rank = TYPES[rank];
+        }
+
         public string GetCardType() => type;
         public string GetCardRank() => rank;
-        public int GetPlayer() => player;
-        public int GetTurn() => turn;
         public void SetType(string type)
         {
             this.type = type;
@@ -35,20 +38,10 @@ namespace HOKM.Code
         {
             this.rank = rank;
         }
-        public void SetPlayer(int player)
-        {
-            this.player = player;
-        }
-        public void SetTurn(int turn)
-        {
-            this.turn = turn;
-        }
         public int GetValue()
         {
-            char pow = type[type.Length - 1];
-            for (int i = 0; i < TYPES.Length; i++)
-                if (TYPES[i] == pow)
-                    return i;
+            if (TYPES.Contains(type))
+                return Array.IndexOf(TYPES, type);
             return -1;
         }
     }
