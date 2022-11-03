@@ -75,7 +75,7 @@ namespace HOKM.Code
             Console.WriteLine(suit);
 
             string[] partner_discover = discover[partner_id - 1].Split('|');
-            string[] kills = new string[4];
+            string[] kills = new string[5];
             for (int i = 0; i < partner_discover.Length; i++)
                 if (partner_discover[i].Contains("KILL"))
                     kills[i] = partner_discover[i].Substring(5);
@@ -89,7 +89,7 @@ namespace HOKM.Code
                 {
                     Card highestStrong = new Card("", "e");
                     foreach (Card card in pack)
-                        if (card.GetCardType() == strong && card.GetValue() > highestStrong.GetValue())
+                        if (card!=null && card.GetCardType() == strong && card.GetValue() > highestStrong.GetValue())
                             highestStrong = card;
                     return highestStrong;
                 }
@@ -503,15 +503,13 @@ namespace HOKM.Code
             foreach (Card card in pack) //make sure we dont return trump card
                 if (card != null && card.GetCardType() != strong)
                 {
-                    selected.SetType(card.GetCardType());
-                    selected.SetRank(card.GetCardRank());
+                    selected = card;
                 }
             foreach (Card card in pack) // return lowest ranking card thats not a trump card
                 if (card != null && card.GetCardType() != strong)
                     if (card.GetValue() < selected.GetValue())
                     {
-                        selected.SetType(card.GetCardType());
-                        selected.SetRank(card.GetCardRank());
+                        selected = card;
                     }
             return selected;
         }
@@ -527,15 +525,13 @@ namespace HOKM.Code
             foreach (Card card in pack) //make sure we dont return trump card
                 if (card != null && card.GetCardType() == suit)
                 {
-                    selected.SetType(card.GetCardType());
-                    selected.SetRank(card.GetCardRank());
+                    selected = card;
                 }
             foreach (Card card in pack) // return lowest ranking card thats not a trump card
                 if (card != null && card.GetCardType() == suit)
                     if (card.GetValue() < selected.GetValue())
                     {
-                        selected.SetType(card.GetCardType());
-                        selected.SetRank(card.GetCardRank());
+                        selected = card;
                     }
             return selected;
         }

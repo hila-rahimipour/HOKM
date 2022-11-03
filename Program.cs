@@ -14,7 +14,7 @@ namespace HOKM
     static class Program
     {
 
-        private static string SERVER_ADDR = "10.0.0.4";
+        private static string SERVER_ADDR = "127.0.0.1";
         private static int SERVER_PORT = 55555;
         private static string USERNAME = "Name";
 
@@ -42,6 +42,7 @@ namespace HOKM
             Thread gameThread = new Thread(() => GameThread(form));
             gameThread.Start();
             Application.Run(form);
+            //waitHandle.Set();
         }
 
         static void GameThread(Form1 form)
@@ -80,6 +81,8 @@ namespace HOKM
             for (int i = 0; i < 5; i++)
                 first_five[i] = new Card(five_string_arr[i].Split('*')[0], five_string_arr[i].Split('*')[1]);
 
+            //waitHandle.WaitOne();
+            Thread.Sleep(500);
             // Close the title screen:
             form.Controls.Find("titleScreen1", false)[0].Dispose();
             FirstFiveScreen firstFiveScreen = (FirstFiveScreen)form.Controls.Find("firstFiveScreen1", false)[0];
@@ -214,51 +217,15 @@ namespace HOKM
                     playedCards[i] = c;
                 }
 
-                for (int i = 0; i < 13; i++)
-                    if (pack[i] == null)
-                        Console.WriteLine("null");
-                    else
-                        Console.WriteLine(pack[i].GetCardRank() + "_" + pack[i].GetCardType());
-                Console.WriteLine();
-
                 Func<Card, string> formatCard = (Card card) => card.GetCardRank().Substring(5) + card.GetCardType().Substring(0, 1);
 
-                screen.ShowTurn((4 - counter) % 4, index, formatCard(playedCards[partner_id - 1]),
-                    formatCard(playedCards[partner_id]), formatCard(playedCards[(partner_id + 1) % 4]));
+                screen.ShowTurn((4 - counter) % 4, index, formatCard(playedCards[(ID + 2) % 4]),
+                    formatCard(playedCards[(ID) % 4]), formatCard(playedCards[(ID + 1) % 4]));
                 waitHandle.WaitOne();
                 ScreenBlink(screen, isWinner);
                 screen.UpdatePoints(points[0], points[1]);
 
-                for (int i = 0; i < 13; i++)
-                    if (pack[i] == null)
-                        Console.WriteLine("null");
-                    else
-                        Console.WriteLine(pack[i].GetCardRank() + "_" + pack[i].GetCardType());
-                Console.WriteLine();
-
-                //Console.WriteLine(Array.IndexOf(pack, result));
-                //pack[Array.IndexOf(pack, result)] = null;
-                //foreach (Card card in pack)
-                //{
-                //    if (card == null)
-                //        Console.Write("null  ");
-                //    else
-                //        Console.Write(card.GetCardType() + " " + card.GetCardRank() + "  ");
-                //}
-                //Console.WriteLine();
-
-                for (int i = 0; i < 13; i++)
-                    if (pack[i] == null)
-                        Console.WriteLine("null");
-                    else
-                        Console.WriteLine(pack[i].GetCardRank() + "_" + pack[i].GetCardType());
-
                 REAL_STARTEGY.Discover(partner_id, strong, counter, playedCards, playedStrongCards);
-                for (int i = 0; i < 13; i++)
-                    if (pack[i] == null)
-                        Console.WriteLine("null");
-                    else
-                        Console.WriteLine(pack[i].GetCardRank() + "_" + pack[i].GetCardType());
             }
         }
 
