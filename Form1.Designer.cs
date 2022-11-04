@@ -30,6 +30,7 @@ namespace HOKM
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+<<<<<<< Updated upstream
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
@@ -62,6 +63,12 @@ namespace HOKM
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox16)).BeginInit();
+=======
+            this.titleScreen1 = new HOKM.Screens.TitleScreen();
+            this.firstFiveScreen1 = new HOKM.Screens.FirstFiveScreen();
+            this.gameScreen1 = new HOKM.Screens.GameScreen();
+            this.endScreen1 = new HOKM.Screens.EndScreen();
+>>>>>>> Stashed changes
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -240,12 +247,23 @@ namespace HOKM
             this.pictureBox16.TabIndex = 0;
             this.pictureBox16.TabStop = false;
             // 
+            // endScreen1
+            // 
+            this.endScreen1.BackColor = System.Drawing.Color.LightGreen;
+            this.endScreen1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.endScreen1.Location = new System.Drawing.Point(0, 0);
+            this.endScreen1.MinimumSize = new System.Drawing.Size(1150, 750);
+            this.endScreen1.Name = "endScreen1";
+            this.endScreen1.Size = new System.Drawing.Size(1150, 750);
+            this.endScreen1.TabIndex = 3;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+<<<<<<< Updated upstream
             this.ClientSize = new System.Drawing.Size(863, 522);
             this.Controls.Add(this.pictureBox8);
             this.Controls.Add(this.pictureBox4);
@@ -263,6 +281,14 @@ namespace HOKM
             this.Controls.Add(this.pictureBox13);
             this.Controls.Add(this.pictureBox9);
             this.Controls.Add(this.pictureBox1);
+=======
+            this.ClientSize = new System.Drawing.Size(1132, 703);
+            this.Controls.Add(this.titleScreen1);
+            this.Controls.Add(this.firstFiveScreen1);
+            this.Controls.Add(this.gameScreen1);
+            this.Controls.Add(this.endScreen1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+>>>>>>> Stashed changes
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -289,6 +315,7 @@ namespace HOKM
 
         #endregion
 
+<<<<<<< Updated upstream
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;
@@ -305,6 +332,12 @@ namespace HOKM
         private System.Windows.Forms.PictureBox pictureBox11;
         private System.Windows.Forms.PictureBox pictureBox12;
         private System.Windows.Forms.PictureBox pictureBox16;
+=======
+        private Screens.GameScreen gameScreen1;
+        private Screens.FirstFiveScreen firstFiveScreen1;
+        private Screens.TitleScreen titleScreen1;
+        private Screens.EndScreen endScreen1;
+>>>>>>> Stashed changes
     }
 }
 
